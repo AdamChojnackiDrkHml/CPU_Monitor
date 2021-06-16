@@ -19,9 +19,12 @@ CMakeFiles/CPU_Monitor.dir/src/main.c.o: \
   /usr/include/bits/struct_stat.h /usr/include/string.h \
   /usr/include/bits/types/locale_t.h \
   /usr/include/bits/types/__locale_t.h /usr/include/strings.h \
-  /usr/include/pthread.h /usr/include/sched.h \
-  /usr/include/bits/types/time_t.h /usr/include/bits/sched.h \
-  /usr/include/bits/types/struct_sched_param.h \
+  /usr/include/unistd.h /usr/include/bits/posix_opt.h \
+  /usr/include/bits/environments.h /usr/include/bits/confname.h \
+  /usr/include/bits/getopt_posix.h /usr/include/bits/getopt_core.h \
+  /usr/include/bits/unistd_ext.h /usr/include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/types/time_t.h \
+  /usr/include/bits/sched.h /usr/include/bits/types/struct_sched_param.h \
   /usr/include/bits/cpu-set.h /usr/include/time.h \
   /usr/include/bits/time.h /usr/include/bits/types/clock_t.h \
   /usr/include/bits/types/struct_tm.h \

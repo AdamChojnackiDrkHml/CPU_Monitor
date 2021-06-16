@@ -8,7 +8,7 @@ file(GLOB PROJECT_SOURCE_FILES CONFIGURE_DEPENDS src/*.c)
 include_directories(headers/)
 
 
-
+add_compile_options(-Wall -Wextra -Weverything)
 
 add_executable(CPU_Monitor ${PROJECT_SOURCE_FILES})
 

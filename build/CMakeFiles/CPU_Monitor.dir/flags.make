@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/adam/Pers/CPU_Monitor/headers
 
-C_FLAGS = -g
+C_FLAGS = -g -Wall -Wextra -Weverything
 
