@@ -1,0 +1,5 @@
+/home/adam/Pers/CPU_Monitor/build/CMakeFiles/edit_cache.dir
+/home/adam/Pers/CPU_Monitor/build/CMakeFiles/package_source.dir
+/home/adam/Pers/CPU_Monitor/build/CMakeFiles/rebuild_cache.dir
+/home/adam/Pers/CPU_Monitor/build/CMakeFiles/package.dir
+/home/adam/Pers/CPU_Monitor/build/CMakeFiles/CPU_Monitor.dir
