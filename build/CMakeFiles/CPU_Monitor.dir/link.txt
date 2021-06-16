@@ -1,1 +1,1 @@
-/usr/bin/clang-12 -g CMakeFiles/CPU_Monitor.dir/src/main.c.o -o CPU_Monitor  -lpthread 
+/usr/bin/clang-12 -g CMakeFiles/CPU_Monitor.dir/src/main.c.o CMakeFiles/CPU_Monitor.dir/src/reader.c.o -o CPU_Monitor  -lpthread 

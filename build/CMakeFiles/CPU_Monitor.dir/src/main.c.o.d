@@ -19,12 +19,9 @@ CMakeFiles/CPU_Monitor.dir/src/main.c.o: \
   /usr/include/bits/struct_stat.h /usr/include/string.h \
   /usr/include/bits/types/locale_t.h \
   /usr/include/bits/types/__locale_t.h /usr/include/strings.h \
-  /usr/include/unistd.h /usr/include/bits/posix_opt.h \
-  /usr/include/bits/environments.h /usr/include/bits/confname.h \
-  /usr/include/bits/getopt_posix.h /usr/include/bits/getopt_core.h \
-  /usr/include/bits/unistd_ext.h /usr/include/pthread.h \
-  /usr/include/sched.h /usr/include/bits/types/time_t.h \
-  /usr/include/bits/sched.h /usr/include/bits/types/struct_sched_param.h \
+  /usr/include/pthread.h /usr/include/sched.h \
+  /usr/include/bits/types/time_t.h /usr/include/bits/sched.h \
+  /usr/include/bits/types/struct_sched_param.h \
   /usr/include/bits/cpu-set.h /usr/include/time.h \
   /usr/include/bits/time.h /usr/include/bits/types/clock_t.h \
   /usr/include/bits/types/struct_tm.h \
@@ -53,4 +50,5 @@ CMakeFiles/CPU_Monitor.dir/src/main.c.o: \
   /usr/include/bits/byteswap.h /usr/include/bits/uintn-identity.h \
   /usr/include/sys/select.h /usr/include/bits/select.h \
   /usr/include/bits/types/struct_timeval.h /usr/include/alloca.h \
-  /usr/include/bits/stdlib-float.h
+  /usr/include/bits/stdlib-float.h \
+  /home/adam/Pers/CPU_Monitor/src/../headers/reader.h

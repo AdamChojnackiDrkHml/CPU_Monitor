@@ -56,7 +56,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/adam/Pers/CPU_Monitor
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/adam/Pers/CPU_Monitor/build
+CMAKE_BINARY_DIR = /home/adam/Pers/CPU_Monitor
 
 # Include any dependencies generated for this target.
 include CMakeFiles/CPU_Monitor.dir/depend.make
@@ -70,32 +70,32 @@ include CMakeFiles/CPU_Monitor.dir/progress.make
 include CMakeFiles/CPU_Monitor.dir/flags.make
 
 CMakeFiles/CPU_Monitor.dir/src/main.c.o: CMakeFiles/CPU_Monitor.dir/flags.make
-CMakeFiles/CPU_Monitor.dir/src/main.c.o: ../src/main.c
+CMakeFiles/CPU_Monitor.dir/src/main.c.o: src/main.c
 CMakeFiles/CPU_Monitor.dir/src/main.c.o: CMakeFiles/CPU_Monitor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/adam/Pers/CPU_Monitor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/CPU_Monitor.dir/src/main.c.o"
-	/usr/bin/clang-12 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/CPU_Monitor.dir/src/main.c.o -MF CMakeFiles/CPU_Monitor.dir/src/main.c.o.d -o CMakeFiles/CPU_Monitor.dir/src/main.c.o -c /home/adam/Pers/CPU_Monitor/src/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/CPU_Monitor.dir/src/main.c.o"
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/CPU_Monitor.dir/src/main.c.o -MF CMakeFiles/CPU_Monitor.dir/src/main.c.o.d -o CMakeFiles/CPU_Monitor.dir/src/main.c.o -c /home/adam/Pers/CPU_Monitor/src/main.c
 
 CMakeFiles/CPU_Monitor.dir/src/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/CPU_Monitor.dir/src/main.c.i"
-	/usr/bin/clang-12 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/adam/Pers/CPU_Monitor/src/main.c > CMakeFiles/CPU_Monitor.dir/src/main.c.i
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/adam/Pers/CPU_Monitor/src/main.c > CMakeFiles/CPU_Monitor.dir/src/main.c.i
 
 CMakeFiles/CPU_Monitor.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/CPU_Monitor.dir/src/main.c.s"
-	/usr/bin/clang-12 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/adam/Pers/CPU_Monitor/src/main.c -o CMakeFiles/CPU_Monitor.dir/src/main.c.s
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/adam/Pers/CPU_Monitor/src/main.c -o CMakeFiles/CPU_Monitor.dir/src/main.c.s
 
 CMakeFiles/CPU_Monitor.dir/src/reader.c.o: CMakeFiles/CPU_Monitor.dir/flags.make
-CMakeFiles/CPU_Monitor.dir/src/reader.c.o: ../src/reader.c
+CMakeFiles/CPU_Monitor.dir/src/reader.c.o: src/reader.c
 CMakeFiles/CPU_Monitor.dir/src/reader.c.o: CMakeFiles/CPU_Monitor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/adam/Pers/CPU_Monitor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/CPU_Monitor.dir/src/reader.c.o"
-	/usr/bin/clang-12 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/CPU_Monitor.dir/src/reader.c.o -MF CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d -o CMakeFiles/CPU_Monitor.dir/src/reader.c.o -c /home/adam/Pers/CPU_Monitor/src/reader.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/CPU_Monitor.dir/src/reader.c.o"
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/CPU_Monitor.dir/src/reader.c.o -MF CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d -o CMakeFiles/CPU_Monitor.dir/src/reader.c.o -c /home/adam/Pers/CPU_Monitor/src/reader.c
 
 CMakeFiles/CPU_Monitor.dir/src/reader.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/CPU_Monitor.dir/src/reader.c.i"
-	/usr/bin/clang-12 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/adam/Pers/CPU_Monitor/src/reader.c > CMakeFiles/CPU_Monitor.dir/src/reader.c.i
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/adam/Pers/CPU_Monitor/src/reader.c > CMakeFiles/CPU_Monitor.dir/src/reader.c.i
 
 CMakeFiles/CPU_Monitor.dir/src/reader.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/CPU_Monitor.dir/src/reader.c.s"
-	/usr/bin/clang-12 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/adam/Pers/CPU_Monitor/src/reader.c -o CMakeFiles/CPU_Monitor.dir/src/reader.c.s
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/adam/Pers/CPU_Monitor/src/reader.c -o CMakeFiles/CPU_Monitor.dir/src/reader.c.s
 
 # Object files for target CPU_Monitor
 CPU_Monitor_OBJECTS = \
@@ -109,7 +109,7 @@ CPU_Monitor: CMakeFiles/CPU_Monitor.dir/src/main.c.o
 CPU_Monitor: CMakeFiles/CPU_Monitor.dir/src/reader.c.o
 CPU_Monitor: CMakeFiles/CPU_Monitor.dir/build.make
 CPU_Monitor: CMakeFiles/CPU_Monitor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/adam/Pers/CPU_Monitor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable CPU_Monitor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable CPU_Monitor"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CPU_Monitor.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -121,6 +121,6 @@ CMakeFiles/CPU_Monitor.dir/clean:
 .PHONY : CMakeFiles/CPU_Monitor.dir/clean
 
 CMakeFiles/CPU_Monitor.dir/depend:
-	cd /home/adam/Pers/CPU_Monitor/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor/build /home/adam/Pers/CPU_Monitor/build /home/adam/Pers/CPU_Monitor/build/CMakeFiles/CPU_Monitor.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/adam/Pers/CPU_Monitor && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor/CMakeFiles/CPU_Monitor.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/CPU_Monitor.dir/depend
 

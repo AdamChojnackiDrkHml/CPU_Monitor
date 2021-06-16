@@ -3,5 +3,10 @@
   "directory": "/home/adam/Pers/CPU_Monitor/build",
   "command": "/usr/bin/clang-12  -I/home/adam/Pers/CPU_Monitor/headers -g -o CMakeFiles/CPU_Monitor.dir/src/main.c.o -c /home/adam/Pers/CPU_Monitor/src/main.c",
   "file": "/home/adam/Pers/CPU_Monitor/src/main.c"
+},
+{
+  "directory": "/home/adam/Pers/CPU_Monitor/build",
+  "command": "/usr/bin/clang-12  -I/home/adam/Pers/CPU_Monitor/headers -g -o CMakeFiles/CPU_Monitor.dir/src/reader.c.o -c /home/adam/Pers/CPU_Monitor/src/reader.c",
+  "file": "/home/adam/Pers/CPU_Monitor/src/reader.c"
 }
 ]
