@@ -1,12 +1,7 @@
 #ifndef READER_H
 #define READER_H
 
-
-
-#include<stdio.h>
 #include<stdlib.h>
-#include<pthread.h> 
-#include <sys/stat.h>
 
 
 typedef struct reader_data 
@@ -18,11 +13,15 @@ typedef struct reader_data
 } reader_data;
 
 static FILE *fp;
-static struct stat st;
 
-static const int data_chunk_size = 256; 
+static const size_t data_chunk_size = 256; 
+static const size_t status_succes = 0;
+static const size_t status_failure = 1;
+
+static const size_t max_fopen_tries = 5;
+
 static size_t control = 1;
-
+static const size_t control_end = 0;
 
 extern void*  reader_task(void *arg);
 

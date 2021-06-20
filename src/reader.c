@@ -1,35 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <pthread.h>
-#include <limits.h>
-#include <sys/stat.h>
+#include <unistd.h>
 #include "../headers/reader.h"
 
 
 static size_t reader_open_file(void)
 {
-    for(size_t i = 1; i < 6; i++)
+
+    for(size_t i = 1; i <= max_fopen_tries; i++)
     {
         fp = fopen("/proc/stat", "r");
         if (fp != NULL)
         {
-            return 1;
+            return status_succes;
         }
-        printf("Error openning /proc/stat %zu time'n", i);
+        printf("Error openning /proc/stat %zu time\n", i);
     }
     printf("5th time failure openning file, exiting \n");
-    return 0;
+    return status_failure;
 }
 
 
 static int reader_close_file(void)
 {
-
-    fclose(fp);
-
-    return 0;
+    if(fclose(fp) == EOF)
+    {
+        return status_failure;
+    }
+    fp = NULL;
+    return status_succes;
 }
 
 static char* reader_rFile_to_buffer(void)
@@ -89,7 +90,7 @@ void*  reader_task(void *arg)
         
         pthread_mutex_lock(mutex);
 
-        if(reader_open_file() == 0)
+        if(reader_open_file())
         {
             (*r_data)->status = 1;
             return NULL;
@@ -99,7 +100,7 @@ void*  reader_task(void *arg)
         if(scannedData == NULL)
         {
             printf("Error, retriveing data from function failed, exiting\n");
-            (*r_data)->status = 1;
+            (*r_data)->status = status_failure;
             return NULL;
 
         }
@@ -121,7 +122,7 @@ void*  reader_task(void *arg)
 
 void reader_end_task(void)
 {
-    control = 0;
+    control = control_end;
 }
 
 
@@ -133,7 +134,7 @@ reader_data* reader_createReaderData(pthread_mutex_t* mutex, char* buffer)
         printf("Error allocating memory for reader_data struct, exiting\n");
         return NULL;
     }
-    newData->status = 0;
+    newData->status = status_succes;
     newData->mutex = mutex;
     newData->data = buffer;
 
