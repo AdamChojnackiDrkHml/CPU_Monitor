@@ -8,7 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/adam/Pers/CPU_Monitor/src/analyzer.c" "CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o" "gcc" "CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o.d"
   "/home/adam/Pers/CPU_Monitor/src/main.c" "CMakeFiles/CPU_Monitor.dir/src/main.c.o" "gcc" "CMakeFiles/CPU_Monitor.dir/src/main.c.o.d"
   "/home/adam/Pers/CPU_Monitor/src/reader.c" "CMakeFiles/CPU_Monitor.dir/src/reader.c.o" "gcc" "CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d"
   )

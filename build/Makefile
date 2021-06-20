@@ -150,30 +150,6 @@ CPU_Monitor/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/build
 .PHONY : CPU_Monitor/fast
 
-src/analyzer.o: src/analyzer.c.o
-.PHONY : src/analyzer.o
-
-# target to build an object file
-src/analyzer.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o
-.PHONY : src/analyzer.c.o
-
-src/analyzer.i: src/analyzer.c.i
-.PHONY : src/analyzer.i
-
-# target to preprocess a source file
-src/analyzer.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/analyzer.c.i
-.PHONY : src/analyzer.c.i
-
-src/analyzer.s: src/analyzer.c.s
-.PHONY : src/analyzer.s
-
-# target to generate assembly for a file
-src/analyzer.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/analyzer.c.s
-.PHONY : src/analyzer.c.s
-
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -233,9 +209,6 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... CPU_Monitor"
-	@echo "... src/analyzer.o"
-	@echo "... src/analyzer.i"
-	@echo "... src/analyzer.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

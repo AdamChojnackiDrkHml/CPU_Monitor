@@ -1,0 +1,11 @@
+# ninja log v5
+0	33	1624176954566166972	CMakeFiles/CPU_Monitor.dir/src/main.c.o	e0678bb24e0ea0b9
+0	33	1624176954566166972	CMakeFiles/CPU_Monitor.dir/src/reader.c.o	fdeef413251da9ff
+0	11	0	/home/adam/Pers/CPU_Monitor/build/CMakeFiles/cmake.verify_globs	49fe5fe3f31e65b3
+33	69	1624176954602833884	CPU_Monitor	3d8284a9ce5388ce
+0	7	0	/home/adam/Pers/CPU_Monitor/build/CMakeFiles/cmake.verify_globs	49fe5fe3f31e65b3
+0	28	1624176987953059721	CMakeFiles/CPU_Monitor.dir/src/reader.c.o	fdeef413251da9ff
+28	59	1624176987986393281	CPU_Monitor	3d8284a9ce5388ce
+1	10	0	/home/adam/Pers/CPU_Monitor/build/CMakeFiles/cmake.verify_globs	49fe5fe3f31e65b3
+0	36	1624177034553381433	CMakeFiles/CPU_Monitor.dir/src/reader.c.o	fdeef413251da9ff
+36	76	1624177034593381712	CPU_Monitor	3d8284a9ce5388ce

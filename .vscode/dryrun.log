@@ -1,0 +1,28 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/adam/Pers/CPU_Monitor'
+/usr/bin/cmake -P /home/adam/Pers/CPU_Monitor/CMakeFiles/VerifyGlobs.cmake
+/usr/bin/cmake -S/home/adam/Pers/CPU_Monitor -B/home/adam/Pers/CPU_Monitor --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/adam/Pers/CPU_Monitor/CMakeFiles /home/adam/Pers/CPU_Monitor//CMakeFiles/progress.marks
+make -s -f CMakeFiles/Makefile2 all
+ 
+make[1]: Entering directory '/home/adam/Pers/CPU_Monitor'
+make -s -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/depend
+ 
+make[2]: Entering directory '/home/adam/Pers/CPU_Monitor'
+cd /home/adam/Pers/CPU_Monitor && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor /home/adam/Pers/CPU_Monitor/CMakeFiles/CPU_Monitor.dir/DependInfo.cmake --color=
+make[2]: Leaving directory '/home/adam/Pers/CPU_Monitor'
+make -s -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/build
+ 
+make[2]: Entering directory '/home/adam/Pers/CPU_Monitor'
+/usr/bin/cmake -E cmake_echo_color --switch= --green --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=1 "Building C object CMakeFiles/CPU_Monitor.dir/src/main.c.o"
+/usr/bin/gcc  -I/home/adam/Pers/CPU_Monitor/headers -Wall -Wextra -Weverything -MD -MT CMakeFiles/CPU_Monitor.dir/src/main.c.o -MF CMakeFiles/CPU_Monitor.dir/src/main.c.o.d -o CMakeFiles/CPU_Monitor.dir/src/main.c.o -c /home/adam/Pers/CPU_Monitor/src/main.c
+/usr/bin/cmake -E cmake_echo_color --switch= --green --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=2 "Building C object CMakeFiles/CPU_Monitor.dir/src/reader.c.o"
+/usr/bin/gcc  -I/home/adam/Pers/CPU_Monitor/headers -Wall -Wextra -Weverything -MD -MT CMakeFiles/CPU_Monitor.dir/src/reader.c.o -MF CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d -o CMakeFiles/CPU_Monitor.dir/src/reader.c.o -c /home/adam/Pers/CPU_Monitor/src/reader.c
+/usr/bin/cmake -E cmake_echo_color --switch= --green --bold --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=3 "Linking C executable CPU_Monitor"
+/usr/bin/cmake -E cmake_link_script CMakeFiles/CPU_Monitor.dir/link.txt --verbose=
+make[2]: Leaving directory '/home/adam/Pers/CPU_Monitor'
+/usr/bin/cmake -E cmake_echo_color --switch= --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=1,2,3 "Built target CPU_Monitor"
+make[1]: Leaving directory '/home/adam/Pers/CPU_Monitor'
+/usr/bin/cmake -E cmake_progress_start /home/adam/Pers/CPU_Monitor/CMakeFiles 0
+make: Leaving directory '/home/adam/Pers/CPU_Monitor'
+ 

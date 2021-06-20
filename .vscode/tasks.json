@@ -1,0 +1,30 @@
+{
+    
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: gcc kompiluj aktywny plik",
+            "command": "/usr/bin/gcc",
+            "args": [
+                "-g",
+                "${file}",
+                "reader.c",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-lpthread"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Zadanie wygenerowane przez debuger."
+        }
+    ],
+    "version": "2.0.0"
+}

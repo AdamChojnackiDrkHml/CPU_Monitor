@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "mutex": "c",
+        "stat.h": "c",
+        "limits.h": "c",
+        "reader.h": "c"
+    }
+}
