@@ -5,7 +5,7 @@
 
 
 
-queue_RA_data* queue_create_RA_data(pthread_mutex_t* mutex, char* buffer)
+queue_RA_data* queue_create_RA_data(pthread_mutex_t* mutex)
 {
     queue_RA_data* newData = (queue_RA_data*)malloc(sizeof(queue_RA_data));
     if(newData == NULL)
@@ -15,7 +15,23 @@ queue_RA_data* queue_create_RA_data(pthread_mutex_t* mutex, char* buffer)
     }
     newData->status = 0;
     newData->mutex = mutex;
-    newData->data = buffer;
+    newData->data = NULL;
 
     return newData;
+}
+
+void queue_destroy_RA_data(queue_RA_data** RA_data)
+{
+    if(*RA_data != NULL)
+    {
+        return;
+    }
+    if((*RA_data)->data != NULL)
+    {
+        free((*RA_data)->data);
+        (*RA_data)->data = NULL;
+    }
+
+    free(*RA_data);
+    *RA_data = NULL;
 }

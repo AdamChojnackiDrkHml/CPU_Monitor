@@ -11,6 +11,7 @@ typedef struct queue_RA_data
     char pad[6];
 } queue_RA_data;
 
-queue_RA_data* queue_create_RA_data(pthread_mutex_t* mutex, char* buffer);
+extern queue_RA_data* queue_create_RA_data(pthread_mutex_t* mutex);
+extern void queue_destroy_RA_data(queue_RA_data** RA_data);
 
 #endif
