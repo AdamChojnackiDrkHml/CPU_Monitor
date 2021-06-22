@@ -3,12 +3,8 @@
 
 #include "queue.h"
 
-static size_t analyzer_control = 1;
-static const size_t analyzer_control_end = 0;
 
-static const size_t analyzer_status_succes = 0;
-static const size_t analyzer_status_failure = 1;
 
 extern void*  analyzer_task(void *arg);
-extern void analyzer_end_task(void);
+extern void analyzer_call_exit(void);
 #endif

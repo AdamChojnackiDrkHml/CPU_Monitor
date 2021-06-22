@@ -1,10 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
 #include <unistd.h>
 #include "../headers/reader.h"
+#include "../headers/queue.h"
+#include "../headers/global.h"
 
+
+static FILE *fp;
+
+
+static const size_t reader_status_succes = 0;
+static const size_t reader_status_failure = 1;
+static volatile size_t end_succes = 0;
+static const size_t max_fopen_tries = 5;
+
+static size_t reader_control = 1;
+static const size_t reader_control_end = 0;
+static unsigned short last_read_Data_Size_Multiplier = 1;
+static unsigned short is_read = 0;
 
 static size_t reader_open_file(void)
 {
@@ -14,12 +28,12 @@ static size_t reader_open_file(void)
         fp = fopen("/proc/stat", "r");
         if (fp != NULL)
         {
-            return status_succes;
+            return reader_status_succes;
         }
-        printf("Error openning /proc/stat %zu time\n", i);
+        fprintf(stderr, "Error openning /proc/stat %zu time\n", i);
     }
-    printf("5th time failure openning file, exiting \n");
-    return status_failure;
+    fprintf(stderr, "5th time failure openning file, exiting \n");
+    return reader_status_failure;
 }
 
 
@@ -27,27 +41,27 @@ static int reader_close_file(void)
 {
     if(fclose(fp) == EOF)
     {
-        return status_failure;
+        return reader_status_failure;
     }
     fp = NULL;
-    return status_succes;
+    return reader_status_succes;
 }
 
 static char* reader_rFile_to_buffer(void)
 {
-    size_t readDataSizeMultiplier = 1;
+    
     char* readData = (char*)malloc(sizeof(char));
 
     if(readData == NULL)
     {
-        printf("Error, failed allocating memory for readData, exiting \n");
+        fprintf(stderr, "Error, failed allocating memory for readData, exiting \n");
         return NULL;
     }
 
     char* buffer = (char*)malloc(sizeof(char)*data_chunk_size);
     if(buffer == NULL)
     {
-        printf("Error, failed allocating memory for 256 bytes buffer, exiting \n");
+        fprintf(stderr, "Error, failed allocating memory for 256 bytes buffer, exiting \n");
         free(buffer);
         return NULL;
     }
@@ -56,26 +70,24 @@ static char* reader_rFile_to_buffer(void)
 
     while(fgets(buffer,data_chunk_size, fp) != NULL )
     {
-        char* temp = (char*)realloc(readData, sizeof(char) * ((data_chunk_size * readDataSizeMultiplier) + 1));
+        char* temp = (char*)malloc(sizeof(char) * ((data_chunk_size * last_read_Data_Size_Multiplier) + 1));
         if(temp == NULL)
         {
-            printf("Error, failed allocating memory for 256 bytes buffer, exiting \n");
+            fprintf(stderr, "Error, failed reallocating memory for extended data buffer, exiting \n");
             free(buffer);
             free(readData);
             return NULL;
         }
-        else if(readData != temp)
-        {
-            readData = temp;
-        }
-        temp = NULL;
-        free(temp);
-        readDataSizeMultiplier++;
+        strcpy(temp, readData);
+        free(readData);
+        readData = temp;
+        last_read_Data_Size_Multiplier++;
         strcat(readData, buffer);
     }
 
     free(buffer);
-
+    buffer = NULL;
+    end_succes = 1;
     return readData;
 }
 
@@ -83,60 +95,64 @@ static char* reader_rFile_to_buffer(void)
 void*  reader_task(void *arg)
 {   
     
-    reader_data** r_data = (reader_data**)(arg);
-    pthread_mutex_t* mutex = (*r_data)->mutex;
-    while(control)
+    queue_RA_data** RA_data = (queue_RA_data**)(arg);
+    pthread_mutex_t* mutex = (*RA_data)->mutex;
+    sem_t* RA_Full = (*RA_data)->RA_Full;
+    sem_t* RA_Empty = (*RA_data)->RA_Empty;
+    while(reader_control)
     {
         
-        pthread_mutex_lock(mutex);
-
         if(reader_open_file())
         {
-            (*r_data)->status = 1;
+            (*RA_data)->status = 1;
             return NULL;
         }
 
         char* scannedData = reader_rFile_to_buffer();
+
+        sem_wait(RA_Empty);
+        pthread_mutex_lock(mutex);
         if(scannedData == NULL)
         {
-            printf("Error, retriveing data from function failed, exiting\n");
-            (*r_data)->status = status_failure;
+            fprintf(stderr, "Error, retriveing data from function failed, exiting\n");
+            (*RA_data)->status = reader_status_failure;
             return NULL;
 
         }
 
-        (*r_data)->data = scannedData;
-      
-
-        printf("%s", (*r_data)->data);
-        pthread_mutex_unlock((*r_data)->mutex);
-
+        (*RA_data)->data = scannedData;
+        (*RA_data)->status = 2;
+        (*RA_data)->size = last_read_Data_Size_Multiplier;
+        pthread_mutex_unlock((*RA_data)->mutex);
+        sem_post(RA_Full);
+        if(!is_read)
+        {
+            is_read = 1;
+        }
+        last_read_Data_Size_Multiplier = 1;
         reader_close_file();
-        free(scannedData);
-        sleep(2);
+        scannedData = NULL;
+        sleep(1);
     }
-    return NULL;
-}
-
-
-
-void reader_end_task(void)
-{
-    control = control_end;
-}
-
-
-reader_data* reader_createReaderData(pthread_mutex_t* mutex, char* buffer)
-{
-    reader_data* newData = (reader_data*)malloc(sizeof(reader_data));
-    if(newData == NULL)
+    if(!is_read)
     {
-        printf("Error allocating memory for reader_data struct, exiting\n");
-        return NULL;
+        (*RA_data)->status = 3;
+        
     }
-    newData->status = status_succes;
-    newData->mutex = mutex;
-    newData->data = buffer;
-
-    return newData;
+    else 
+    {
+        (*RA_data)->status = 0;
+    }
+    sem_post(RA_Full);
+    pthread_exit(NULL);
 }
+
+
+void reader_call_exit(void)
+{
+    reader_control = reader_control_end;
+    while(!end_succes);
+}
+
+
+

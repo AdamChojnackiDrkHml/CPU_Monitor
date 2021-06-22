@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="CPU_Monitor"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/adam/Pers/CPU_Monitor"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/adam/Pers/CPU_Monitor"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/adam/Pers/CPU_Monitor"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="CPU_Monitor">
+				<Option output="/home/adam/Pers/CPU_Monitor/CPU_Monitor" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/adam/Pers/CPU_Monitor"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/adam/Pers/CPU_Monitor/headers"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 CPU_Monitor"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="CPU_Monitor/fast">
+				<Option output="/home/adam/Pers/CPU_Monitor/CPU_Monitor" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/adam/Pers/CPU_Monitor"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/adam/Pers/CPU_Monitor/headers"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 CPU_Monitor/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/adam/Pers/CPU_Monitor/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/adam/Pers/CPU_Monitor/src/analyzer.c">
+			<Option target="CPU_Monitor"/>
+		</Unit>
+		<Unit filename="/home/adam/Pers/CPU_Monitor/src/main.c">
+			<Option target="CPU_Monitor"/>
+		</Unit>
+		<Unit filename="/home/adam/Pers/CPU_Monitor/src/queue.c">
+			<Option target="CPU_Monitor"/>
+		</Unit>
+		<Unit filename="/home/adam/Pers/CPU_Monitor/src/reader.c">
+			<Option target="CPU_Monitor"/>
+		</Unit>
+		<Unit filename="/home/adam/Pers/CPU_Monitor/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

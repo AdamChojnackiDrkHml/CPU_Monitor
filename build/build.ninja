@@ -91,16 +91,37 @@ build package: phony CMakeFiles/package.util
 
 build cmake_object_order_depends_target_CPU_Monitor: phony || CMakeFiles/CPU_Monitor.dir
 
+build CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o: C_COMPILER__CPU_Monitor_Debug ../src/analyzer.c || cmake_object_order_depends_target_CPU_Monitor
+  DEP_FILE = CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o.d
+  FLAGS = -g -Wall -Wextra -Weverything -Wno-vla
+  INCLUDES = -I../headers
+  OBJECT_DIR = CMakeFiles/CPU_Monitor.dir
+  OBJECT_FILE_DIR = CMakeFiles/CPU_Monitor.dir/src
+
 build CMakeFiles/CPU_Monitor.dir/src/main.c.o: C_COMPILER__CPU_Monitor_Debug ../src/main.c || cmake_object_order_depends_target_CPU_Monitor
   DEP_FILE = CMakeFiles/CPU_Monitor.dir/src/main.c.o.d
-  FLAGS = -g -Wall -Wextra -Weverything
+  FLAGS = -g -Wall -Wextra -Weverything -Wno-vla
+  INCLUDES = -I../headers
+  OBJECT_DIR = CMakeFiles/CPU_Monitor.dir
+  OBJECT_FILE_DIR = CMakeFiles/CPU_Monitor.dir/src
+
+build CMakeFiles/CPU_Monitor.dir/src/printer.c.o: C_COMPILER__CPU_Monitor_Debug ../src/printer.c || cmake_object_order_depends_target_CPU_Monitor
+  DEP_FILE = CMakeFiles/CPU_Monitor.dir/src/printer.c.o.d
+  FLAGS = -g -Wall -Wextra -Weverything -Wno-vla
+  INCLUDES = -I../headers
+  OBJECT_DIR = CMakeFiles/CPU_Monitor.dir
+  OBJECT_FILE_DIR = CMakeFiles/CPU_Monitor.dir/src
+
+build CMakeFiles/CPU_Monitor.dir/src/queue.c.o: C_COMPILER__CPU_Monitor_Debug ../src/queue.c || cmake_object_order_depends_target_CPU_Monitor
+  DEP_FILE = CMakeFiles/CPU_Monitor.dir/src/queue.c.o.d
+  FLAGS = -g -Wall -Wextra -Weverything -Wno-vla
   INCLUDES = -I../headers
   OBJECT_DIR = CMakeFiles/CPU_Monitor.dir
   OBJECT_FILE_DIR = CMakeFiles/CPU_Monitor.dir/src
 
 build CMakeFiles/CPU_Monitor.dir/src/reader.c.o: C_COMPILER__CPU_Monitor_Debug ../src/reader.c || cmake_object_order_depends_target_CPU_Monitor
   DEP_FILE = CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d
-  FLAGS = -g -Wall -Wextra -Weverything
+  FLAGS = -g -Wall -Wextra -Weverything -Wno-vla
   INCLUDES = -I../headers
   OBJECT_DIR = CMakeFiles/CPU_Monitor.dir
   OBJECT_FILE_DIR = CMakeFiles/CPU_Monitor.dir/src
@@ -113,7 +134,7 @@ build CMakeFiles/CPU_Monitor.dir/src/reader.c.o: C_COMPILER__CPU_Monitor_Debug .
 #############################################
 # Link the executable CPU_Monitor
 
-build CPU_Monitor: C_EXECUTABLE_LINKER__CPU_Monitor_Debug CMakeFiles/CPU_Monitor.dir/src/main.c.o CMakeFiles/CPU_Monitor.dir/src/reader.c.o
+build CPU_Monitor: C_EXECUTABLE_LINKER__CPU_Monitor_Debug CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o CMakeFiles/CPU_Monitor.dir/src/main.c.o CMakeFiles/CPU_Monitor.dir/src/printer.c.o CMakeFiles/CPU_Monitor.dir/src/queue.c.o CMakeFiles/CPU_Monitor.dir/src/reader.c.o
   FLAGS = -g
   LINK_LIBRARIES = -lpthread
   OBJECT_DIR = CMakeFiles/CPU_Monitor.dir

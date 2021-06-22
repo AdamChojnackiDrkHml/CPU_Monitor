@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o"
+  "CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o.d"
   "CMakeFiles/CPU_Monitor.dir/src/main.c.o"
   "CMakeFiles/CPU_Monitor.dir/src/main.c.o.d"
+  "CMakeFiles/CPU_Monitor.dir/src/queue.c.o"
+  "CMakeFiles/CPU_Monitor.dir/src/queue.c.o.d"
   "CMakeFiles/CPU_Monitor.dir/src/reader.c.o"
   "CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d"
   "CPU_Monitor"

@@ -81,12 +81,12 @@ clean: CMakeFiles/CPU_Monitor.dir/clean
 CMakeFiles/CPU_Monitor.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=1,2,3 "Built target CPU_Monitor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adam/Pers/CPU_Monitor/CMakeFiles --progress-num=1,2,3,4,5 "Built target CPU_Monitor"
 .PHONY : CMakeFiles/CPU_Monitor.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/CPU_Monitor.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adam/Pers/CPU_Monitor/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adam/Pers/CPU_Monitor/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/CPU_Monitor.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adam/Pers/CPU_Monitor/CMakeFiles 0
 .PHONY : CMakeFiles/CPU_Monitor.dir/rule
