@@ -15,9 +15,9 @@
 #include "../headers/global.h"
 static pthread_t Reader, Analyzer;
 static pthread_mutex_t RA_Mutex;
-static queue_RA_data* RA_data;
 static sem_t RA_Empty;
 static sem_t RA_Full;
+static queue_RA_data* Raa;
 static unsigned short RA_Mutex_Flag, RA_Empty_Flag, RA_Full_Flag;
 static volatile sig_atomic_t done  = 0;
 
@@ -42,7 +42,7 @@ static noreturn void end_protocol(unsigned short exit_status)
 {
     pthread_mutex_lock(&RA_Mutex);
     pthread_mutex_unlock(&RA_Mutex);
-    queue_destroy_RA_data(&RA_data);
+    queue_destroy_RA_data();
     destroy_mutex(&RA_Mutex, RA_Mutex_Flag);
     destroy_semaphore(&RA_Full, RA_Full_Flag);
     destroy_semaphore(&RA_Empty,RA_Empty_Flag);
@@ -74,7 +74,7 @@ int main(void)
     }
     RA_Mutex_Flag = 1;
 
-    if(sem_init(&RA_Empty,0,1) != 0)
+    if(sem_init(&RA_Empty,0,queue_size) != 0)
     {
         RA_Empty_Flag = 1;
         exit_error("Error creating empty semaphore, exiting from main \n");
@@ -88,16 +88,16 @@ int main(void)
     RA_Full_Flag = 1;
     
     
-    RA_data = queue_create_RA_data(&RA_Mutex, &RA_Full, &RA_Empty);
+    Raa = queue_create_RA_data(&RA_Mutex, &RA_Full, &RA_Empty);
 
-    if(RA_data == NULL)
+    if(Raa == NULL)
     {
         exit_error("Error creating RA_data, exiting from main\n");
     }
 
   
-    pthread_create(&Reader, NULL, &reader_task, &RA_data);
-    pthread_create(&Analyzer, NULL, &analyzer_task, &RA_data);
+    pthread_create(&Reader, NULL, &reader_task, &Raa);
+    pthread_create(&Analyzer, NULL, &analyzer_task, &Raa);
 
     while(!done);
     

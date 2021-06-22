@@ -119,10 +119,8 @@ void*  reader_task(void *arg)
             return NULL;
 
         }
-
-        (*RA_data)->data = scannedData;
+        queue_enqueue_RA(scannedData, last_read_Data_Size_Multiplier);
         (*RA_data)->status = 2;
-        (*RA_data)->size = last_read_Data_Size_Multiplier;
         pthread_mutex_unlock((*RA_data)->mutex);
         sem_post(RA_Full);
         if(!is_read)

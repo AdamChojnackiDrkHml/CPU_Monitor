@@ -22,11 +22,14 @@ static size_t* stealData = NULL;
 
 static char* analyzer_local_data = NULL;
 static size_t cpus_counter = 0;
-static size_t analyzer_count_CPUs(char* data)
+
+static queue_RA_record* curr_record = NULL;
+
+static size_t analyzer_count_CPUs()
 {
     size_t counter = 0;  
     char cpuChecker[4] = "AAA";
-    char* lclPointer = strchr(data, '\n') + 1;
+    char* lclPointer = strchr(analyzer_local_data, '\n') + 1;
     strncpy(cpuChecker,lclPointer,3);
 
     while(strcmp(cpuChecker,"cpu") == analyzer_status_succes)
@@ -110,15 +113,16 @@ void* analyzer_task(void *arg)
         pthread_mutex_unlock(mutex);
         pthread_exit(NULL);
     }
-    cpus_counter = analyzer_count_CPUs((*RA_data)->data);
-        
-    analyzer_local_data = (char*)calloc((*RA_data)->size * data_chunk_size + 1,sizeof(char));
-    strcpy(analyzer_local_data,(*RA_data)->data);
-    free((*RA_data)->data);
-    (*RA_data)->data = NULL;
+    curr_record = queue_dequeue_RA();
+    analyzer_local_data = (char*)calloc(curr_record->size * data_chunk_size + 1,sizeof(char));
+    strcpy(analyzer_local_data,curr_record->data);
+    free(curr_record->data);
+    curr_record->data = NULL;
+
     pthread_mutex_unlock(mutex);
     sem_post(RA_Empty);
 
+    cpus_counter = analyzer_count_CPUs();
     userData = (size_t*)calloc(cpus_counter, sizeof(size_t));
     niceData = (size_t*)calloc(cpus_counter, sizeof(size_t));
     systemData = ( size_t*)calloc(cpus_counter, sizeof(size_t));
@@ -144,10 +148,11 @@ void* analyzer_task(void *arg)
             pthread_mutex_unlock(mutex);
             break;
         }
-        analyzer_local_data = (char*)calloc((*RA_data)->size * data_chunk_size + 1,sizeof(char));
-        strcpy(analyzer_local_data,(*RA_data)->data);
-        free((*RA_data)->data);
-        (*RA_data)->data = NULL;
+        curr_record = queue_dequeue_RA();
+        analyzer_local_data = (char*)calloc(curr_record->size * data_chunk_size + 1,sizeof(char));
+        strcpy(analyzer_local_data,curr_record->data);
+        free(curr_record->data);
+        curr_record->data = NULL;
         pthread_mutex_unlock(mutex);
         sem_post(RA_Empty);
 
