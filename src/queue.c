@@ -100,7 +100,7 @@ size_t queue_is_RA_data_null(void)
 
 void queue_create_AP_data(pthread_mutex_t* mutex, sem_t* AP_Full, sem_t* AP_Empty)
 {
-    queue_AP_data* newData = (queue_AP_data*)malloc(sizeof(queue_AP_data));
+    queue_AP_data* newData = (queue_AP_data*)calloc(1,sizeof(queue_AP_data));
     if(newData == NULL)
     {
         fprintf(stderr, "Error allocating memory for queue_AP_data struct, exiting\n");

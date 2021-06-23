@@ -1,6 +1,6 @@
 #include "../headers/analyzer.h"
 #include "../headers/global.h"
-
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,9 +45,9 @@ static unsigned short analyzer_count_CPUs()
     return counter;
 }
 
-static void analyzer_interpreter(void)
+static double*  analyzer_interpreter(void)
 {
-
+        double * interpreted = ( double*)calloc(cpus_counter, sizeof(double));
         char* line_beg_ptr = NULL;
         char* line_end_ptr = NULL;
         line_beg_ptr = analyzer_local_data;
@@ -85,12 +85,13 @@ static void analyzer_interpreter(void)
             double divided = (double)totald - (double)idled;
             double divider = (double)totald;
             double CPU_Percentage = divided/divider * 100.0;
-            results[i] = CPU_Percentage;
+            interpreted[i] = CPU_Percentage;
         }
         
-        free(analyzer_local_data);
-        analyzer_local_data = NULL;
-
+        
+                free(analyzer_local_data);
+            analyzer_local_data = NULL;
+        return interpreted;
 }
 
 
@@ -139,16 +140,22 @@ void* analyzer_task(void *arg)
         irqData = ( size_t*)calloc(cpus_counter, sizeof(size_t));
         softirqData = ( size_t*)calloc(cpus_counter, sizeof(size_t));
         stealData = ( size_t*)calloc(cpus_counter, sizeof(size_t));
-        results = ( double*)calloc(cpus_counter, sizeof(double));
-        analyzer_interpreter();
+        results = analyzer_interpreter();
+        write(0,"WAIT",4);
+
 
         sem_wait(AP_Empty);
         pthread_mutex_lock(AP_mutex);
         AP_data->num_of_CPUs = cpus_counter;
         queue_enqueue_AP(results);
-
+        AP_data->status = 2;
         pthread_mutex_unlock(AP_mutex);
         sem_post(AP_Full);
+        
+        results = NULL;
+
+
+        write(0,"AP_POST",7);
         is_analyzed = 1;
         if(userData == NULL || niceData == NULL || systemData == NULL || idleData == NULL || iowaitData == NULL || irqData == NULL || softirqData  == NULL || stealData  == NULL)
         {
@@ -173,7 +180,7 @@ void* analyzer_task(void *arg)
             pthread_mutex_unlock(RA_mutex);
             sem_post(RA_Empty);
 
-            analyzer_interpreter();
+            results = analyzer_interpreter();
 
             sem_wait(AP_Empty);
             pthread_mutex_lock(AP_mutex);
@@ -182,7 +189,9 @@ void* analyzer_task(void *arg)
             AP_data->status = 2;
             pthread_mutex_unlock(AP_mutex);
             sem_post(AP_Full);
-        
+
+            results = NULL;
+
         }
 
         fflush( stdout );
@@ -204,7 +213,6 @@ void* analyzer_task(void *arg)
         softirqData = NULL;
         stealData = NULL;
         printf("All Freed");
-        end_succes = 1;
     }
     if(!is_analyzed)
     {
@@ -215,6 +223,8 @@ void* analyzer_task(void *arg)
     {
         AP_data->status = 0;
     }
+    sem_post(AP_Full);
+    end_succes = 1;
     return NULL;
 }
 

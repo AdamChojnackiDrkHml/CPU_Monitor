@@ -87,7 +87,6 @@ static char* reader_rFile_to_buffer(void)
 
     free(buffer);
     buffer = NULL;
-    end_succes = 1;
     return readData;
 }
 
@@ -142,6 +141,7 @@ void*  reader_task(void *arg)
         RA_data->status = 0;
     }
     sem_post(RA_Full);
+    end_succes = 1;
     return NULL;
 }
 

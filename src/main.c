@@ -126,21 +126,20 @@ int main(void)
   
     pthread_create(&Reader, NULL, &reader_task, NULL);
     pthread_create(&Analyzer, NULL, &analyzer_task, NULL);
-    pthread_create(&Reader, NULL, &printer_task, NULL);
-    while(!done);
-    
+    pthread_create(&Printer, NULL, &printer_task, NULL);
+    sleep(3);
     reader_call_exit(); 
-    printf("reader dead\n");
     pthread_join(Reader, NULL); 
+    printf("reader dead\n");
 
     analyzer_call_exit();
-    printf("analyzer dead\n");
     pthread_join(Analyzer, NULL);
+    printf("analyzer dead\n");
 
     printer_call_exit();
-    printf("printer dead\n");
     pthread_join(Printer, NULL);
-    
+        printf("printer dead\n");
+
     printf("THIS IS HOW I DO IT\n");
     end_protocol(EXIT_SUCCESS);
 
