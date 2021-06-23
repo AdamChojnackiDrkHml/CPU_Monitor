@@ -7,7 +7,7 @@
 #include "../headers/queue.h"
 #include "../headers/logger.h"
 #include "../headers/global.h"
-
+#include "../headers/watchdog.h"
 static unsigned short cpus_counter = 0;
 static queue_AP_record* curr_record = NULL;
 static double* printer_local_data = NULL;
@@ -34,7 +34,7 @@ void* printer_task(void *arg)
     sem_t* AP_Empty = AP_data->AP_Empty;
 
     logger_log("PRINTER : Initialized shared data\n");
-    
+    watchdog_set_me_alive(Printer_ID);
     sem_wait(AP_Full);
     pthread_mutex_lock(mutex);
         
@@ -61,6 +61,8 @@ void* printer_task(void *arg)
 
     while(printer_control)
     {
+        watchdog_set_me_alive(Printer_ID);
+
         sem_wait(AP_Full);
         pthread_mutex_lock(mutex);
         if(AP_data->status == 0)

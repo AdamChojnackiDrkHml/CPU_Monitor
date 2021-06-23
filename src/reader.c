@@ -6,7 +6,7 @@
 #include "../headers/queue.h"
 #include "../headers/global.h"
 #include "../headers/logger.h"
-
+#include "../headers/watchdog.h"
 
 static FILE *fp;
 
@@ -21,7 +21,7 @@ static const size_t reader_control_end = 0;
 static unsigned short last_read_Data_Size_Multiplier = 1;
 static unsigned short is_read = 0;
 
-
+static int counter = 0;
 
 
 
@@ -105,9 +105,11 @@ void*  reader_task(void *arg)
     sem_t* RA_Full = RA_data->RA_Full;
     sem_t* RA_Empty = RA_data->RA_Empty;
     logger_log("READER : Initialized shared data\n");
+    watchdog_set_me_alive(Reader_ID);
 
     while(reader_control)
     {
+        watchdog_set_me_alive(Reader_ID);
         
         if(reader_open_file())
         {
@@ -116,6 +118,7 @@ void*  reader_task(void *arg)
         }
         logger_log("READER : opened file\n");
         char* scannedData = reader_rFile_to_buffer();
+        watchdog_set_me_alive(Reader_ID);
 
         sem_wait(RA_Empty);
         pthread_mutex_lock(RA_mutex);
@@ -130,6 +133,8 @@ void*  reader_task(void *arg)
         RA_data->status = 2;
         pthread_mutex_unlock(RA_mutex);
         sem_post(RA_Full);
+        watchdog_set_me_alive(Reader_ID);
+
         logger_log("READER : put data in queue\n");
         if(!is_read)
         {
@@ -139,7 +144,15 @@ void*  reader_task(void *arg)
         reader_close_file();
         logger_log("READER : closed file\n");
         scannedData = NULL;
-        sleep(1);
+        if(counter < 3)
+        {
+            sleep(1);
+        }
+        else
+        {
+            sleep(3);
+        }
+        counter++;
     }
     if(!is_read)
     {

@@ -14,8 +14,9 @@
 #include "../headers/printer.h"
 #include "../headers/queue.h"
 #include "../headers/logger.h"
+#include "../headers/watchdog.h"
 #include "../headers/global.h"
-static pthread_t Reader, Analyzer, Printer, Logger;
+static pthread_t Reader, Analyzer, Printer, Logger, Watchdog;
 static pthread_mutex_t RA_Mutex, AP_Mutex, log_Mutex;
 static sem_t RA_Empty, RA_Full, AP_Empty, AP_Full, log_Empty, log_Full;
 
@@ -153,9 +154,14 @@ int main(void)
     pthread_create(&Reader, NULL, &reader_task, NULL);
     pthread_create(&Analyzer, NULL, &analyzer_task, NULL);
     pthread_create(&Printer, NULL, &printer_task, NULL);
+    pthread_create(&Watchdog, NULL, &watchdog_task, NULL);
 
+    while(!done && watchdog_raport());
 
-    while(!done);
+    watchdog_call_exit();
+    pthread_join(Watchdog, NULL);
+    printf("watchdog dead\n");
+
     reader_call_exit(); 
     pthread_join(Reader, NULL); 
     printf("reader dead\n");

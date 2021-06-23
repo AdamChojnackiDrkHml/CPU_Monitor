@@ -1,9 +1,0 @@
-# ninja log v5
-1	40	1624485226062422890	CMakeFiles/CPU_Monitor.dir/src/printer.c.o	a47c11c81fd8595e
-1	35	1624486157970074295	CMakeFiles/CPU_Monitor.dir/src/reader.c.o	a9e3be338255dd5e
-0	55	1624485226079089652	CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o	52196f5a1d1bb02a
-1	46	1624485226069089595	CMakeFiles/CPU_Monitor.dir/src/queue.c.o	9105367cc3a5b3d8
-1	42	1624486157976740988	CMakeFiles/CPU_Monitor.dir/src/main.c.o	69b0b8a6f34ce727
-0	10	0	/home/adam/Pers/CPU_Monitor/build/CMakeFiles/cmake.verify_globs	49fe5fe3f31e65b3
-0	43	1624486376011501076	CMakeFiles/CPU_Monitor.dir/src/logger.c.o	ab7ea5db5f55771e
-55	89	1624485226112423179	CPU_Monitor	edb9ea7daf7c4555

@@ -320,3 +320,329 @@ READER : Freed all recources, exiting
 ANALYZER : Freed all recources, exiting
 PRINTER : Printed first data
 PRINTER : Freed all recources, exiting
+READER : put data in queue
+READER : closed file
+ANALYZER : Initialized working data
+PRINTER : Scanned first data
+PRINTER : Printed first data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+ANALYZER : Initialized shared data
+READER : Initialized shared data
+PRINTER : Initialized shared data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Initialized working data
+PRINTER : Scanned first data
+PRINTER : Printed first data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+ANALYZER : Initialized shared data
+READER : Initialized shared data
+READER : opened file
+PRINTER : Initialized shared data
+READER : put data in queue
+READER : closed file
+ANALYZER : Initialized working data
+PRINTER : Scanned first data
+PRINTER : Printed first data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+ANALYZER : Initialized shared data
+READER : put data in queue
+READER : closed file
+PRINTER : Initialized shared data
+ANALYZER : Initialized working data
+PRINTER : Scanned first data
+PRINTER : Printed first data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+ANALYZER : Recieved data
+READER : closed file
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Recieved data
+ANALYZER : Analyzed data
+ANALYZER : Send data to print
+PRINTER : Recieved data
+PRINTER : Printed data
+READER : Freed all recources, exiting
+ANALYZER : Freed all recources, exiting
+READER : opened file
+READER : put data in queue
+READER : closed file
+ANALYZER : Initialized working data
+PRINTER : Scanned first data
+READER : Freed all recources, exiting
+ANALYZER : Freed all recources, exiting
+PRINTER : Printed first data
+PRINTER : Freed all recources, exiting

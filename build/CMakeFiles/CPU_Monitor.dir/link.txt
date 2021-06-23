@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o CMakeFiles/CPU_Monitor.dir/src/logger.c.o CMakeFiles/CPU_Monitor.dir/src/main.c.o CMakeFiles/CPU_Monitor.dir/src/printer.c.o CMakeFiles/CPU_Monitor.dir/src/queue.c.o CMakeFiles/CPU_Monitor.dir/src/reader.c.o CMakeFiles/CPU_Monitor.dir/src/watchdog.c.o -o CPU_Monitor  -lpthread 

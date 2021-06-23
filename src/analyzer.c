@@ -1,7 +1,7 @@
 #include "../headers/analyzer.h"
 #include "../headers/global.h"
 #include "../headers/logger.h"
-
+#include "../headers/watchdog.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -114,7 +114,7 @@ void* analyzer_task(void *arg)
 
     cpus_counter = 0;
 
-
+    watchdog_set_me_alive(Analyzer_ID);
     sem_wait(RA_Full);
     pthread_mutex_lock(RA_mutex);
     if(RA_data->status == 3 || RA_data->status == 0)
@@ -132,6 +132,7 @@ void* analyzer_task(void *arg)
         
         pthread_mutex_unlock(RA_mutex);
         sem_post(RA_Empty);
+        watchdog_set_me_alive(Analyzer_ID);
 
         cpus_counter = analyzer_count_CPUs();
         userData = (size_t*)calloc(cpus_counter, sizeof(size_t));
@@ -155,6 +156,7 @@ void* analyzer_task(void *arg)
         
         results = NULL;
         logger_log("ANALYZER : Initialized working data\n");
+        watchdog_set_me_alive(Analyzer_ID);
 
 
 
@@ -167,6 +169,8 @@ void* analyzer_task(void *arg)
 
         while(analyzer_control)
         {
+            watchdog_set_me_alive(Analyzer_ID);
+
             sem_wait(RA_Full);
             pthread_mutex_lock(RA_mutex);
             if(RA_data->status == 0)

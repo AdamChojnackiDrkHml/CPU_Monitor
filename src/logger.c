@@ -1,6 +1,7 @@
 #include "../headers/logger.h"
 #include "../headers/queue.h"
 #include "../headers/global.h"
+#include "../headers/watchdog.h"
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
@@ -54,6 +55,7 @@ void* logger_task(void * arg)
         fputs(logger_local_data, fd );
         free(logger_local_data);
         logger_local_data = NULL;
+        watchdog_set_me_alive(Logger_ID);
     }
 
     fclose(fd);
