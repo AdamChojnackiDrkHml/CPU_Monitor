@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/adam/Pers/CPU_Monitor/src/printer.c" "CMakeFiles/CPU_Monitor.dir/src/printer.c.o" "gcc" "CMakeFiles/CPU_Monitor.dir/src/printer.c.o.d"
   "/home/adam/Pers/CPU_Monitor/src/queue.c" "CMakeFiles/CPU_Monitor.dir/src/queue.c.o" "gcc" "CMakeFiles/CPU_Monitor.dir/src/queue.c.o.d"
   "/home/adam/Pers/CPU_Monitor/src/reader.c" "CMakeFiles/CPU_Monitor.dir/src/reader.c.o" "gcc" "CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d"
+  "/home/adam/Pers/CPU_Monitor/src/watchdog.c" "CMakeFiles/CPU_Monitor.dir/src/watchdog.c.o" "gcc" "CMakeFiles/CPU_Monitor.dir/src/watchdog.c.o.d"
   )
 
 # Targets to which this target links.

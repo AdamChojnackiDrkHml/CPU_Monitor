@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/CPU_Monitor.dir/src/queue.c.o.d"
   "CMakeFiles/CPU_Monitor.dir/src/reader.c.o"
   "CMakeFiles/CPU_Monitor.dir/src/reader.c.o.d"
+  "CMakeFiles/CPU_Monitor.dir/src/watchdog.c.o"
+  "CMakeFiles/CPU_Monitor.dir/src/watchdog.c.o.d"
   "CPU_Monitor"
   "CPU_Monitor.pdb"
 )

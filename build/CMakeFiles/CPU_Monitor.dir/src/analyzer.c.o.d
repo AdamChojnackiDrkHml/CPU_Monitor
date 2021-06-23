@@ -40,6 +40,7 @@ CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o: \
  /usr/include/bits/ss_flags.h /usr/include/bits/types/struct_sigstack.h \
  /usr/include/bits/sigthread.h /usr/include/bits/signal_ext.h \
  /home/adam/Pers/CPU_Monitor/src/../headers/logger.h \
+ /home/adam/Pers/CPU_Monitor/src/../headers/watchdog.h \
  /usr/include/unistd.h /usr/include/bits/posix_opt.h \
  /usr/include/bits/environments.h /usr/include/bits/confname.h \
  /usr/include/bits/getopt_posix.h /usr/include/bits/getopt_core.h \

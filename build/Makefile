@@ -274,6 +274,30 @@ src/reader.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/reader.c.s
 .PHONY : src/reader.c.s
 
+src/watchdog.o: src/watchdog.c.o
+.PHONY : src/watchdog.o
+
+# target to build an object file
+src/watchdog.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/watchdog.c.o
+.PHONY : src/watchdog.c.o
+
+src/watchdog.i: src/watchdog.c.i
+.PHONY : src/watchdog.i
+
+# target to preprocess a source file
+src/watchdog.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/watchdog.c.i
+.PHONY : src/watchdog.c.i
+
+src/watchdog.s: src/watchdog.c.s
+.PHONY : src/watchdog.s
+
+# target to generate assembly for a file
+src/watchdog.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/watchdog.c.s
+.PHONY : src/watchdog.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -301,6 +325,9 @@ help:
 	@echo "... src/reader.o"
 	@echo "... src/reader.i"
 	@echo "... src/reader.s"
+	@echo "... src/watchdog.o"
+	@echo "... src/watchdog.i"
+	@echo "... src/watchdog.s"
 .PHONY : help
 
 

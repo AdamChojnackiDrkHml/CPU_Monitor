@@ -59,4 +59,5 @@ CMakeFiles/CPU_Monitor.dir/src/main.c.o: \
  /home/adam/Pers/CPU_Monitor/src/../headers/printer.h \
  /home/adam/Pers/CPU_Monitor/src/../headers/queue.h \
  /home/adam/Pers/CPU_Monitor/src/../headers/logger.h \
+ /home/adam/Pers/CPU_Monitor/src/../headers/watchdog.h \
  /home/adam/Pers/CPU_Monitor/src/../headers/global.h

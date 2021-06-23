@@ -55,4 +55,5 @@ CMakeFiles/CPU_Monitor.dir/src/printer.c.o: \
  /usr/include/bits/sigcontext.h /usr/include/bits/types/stack_t.h \
  /usr/include/sys/ucontext.h /usr/include/bits/sigstack.h \
  /usr/include/bits/ss_flags.h /usr/include/bits/types/struct_sigstack.h \
- /usr/include/bits/sigthread.h /usr/include/bits/signal_ext.h
+ /usr/include/bits/sigthread.h /usr/include/bits/signal_ext.h \
+ /home/adam/Pers/CPU_Monitor/src/../headers/watchdog.h

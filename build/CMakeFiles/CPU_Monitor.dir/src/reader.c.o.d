@@ -53,4 +53,5 @@ CMakeFiles/CPU_Monitor.dir/src/reader.c.o: \
  /usr/include/sys/ucontext.h /usr/include/bits/sigstack.h \
  /usr/include/bits/ss_flags.h /usr/include/bits/types/struct_sigstack.h \
  /usr/include/bits/sigthread.h /usr/include/bits/signal_ext.h \
- /home/adam/Pers/CPU_Monitor/src/../headers/logger.h
+ /home/adam/Pers/CPU_Monitor/src/../headers/logger.h \
+ /home/adam/Pers/CPU_Monitor/src/../headers/watchdog.h

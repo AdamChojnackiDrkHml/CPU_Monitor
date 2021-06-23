@@ -39,6 +39,7 @@ CMakeFiles/CPU_Monitor.dir/src/logger.c.o: \
  /usr/include/sys/ucontext.h /usr/include/bits/sigstack.h \
  /usr/include/bits/ss_flags.h /usr/include/bits/types/struct_sigstack.h \
  /usr/include/bits/sigthread.h /usr/include/bits/signal_ext.h \
+ /home/adam/Pers/CPU_Monitor/src/../headers/watchdog.h \
  /usr/include/stdlib.h /usr/include/bits/libc-header-start.h \
  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
  /usr/include/bits/floatn.h /usr/include/bits/floatn-common.h \

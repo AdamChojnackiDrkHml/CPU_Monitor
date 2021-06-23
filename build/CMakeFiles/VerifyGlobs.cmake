@@ -11,6 +11,7 @@ set(OLD_GLOB
   "/home/adam/Pers/CPU_Monitor/src/printer.c"
   "/home/adam/Pers/CPU_Monitor/src/queue.c"
   "/home/adam/Pers/CPU_Monitor/src/reader.c"
+  "/home/adam/Pers/CPU_Monitor/src/watchdog.c"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
