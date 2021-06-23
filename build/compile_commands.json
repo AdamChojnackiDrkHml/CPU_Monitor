@@ -1,27 +1,27 @@
 [
 {
   "directory": "/home/adam/Pers/CPU_Monitor/build",
-  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -o CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o -c /home/adam/Pers/CPU_Monitor/src/analyzer.c",
+  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -Wno-unused-parameter -o CMakeFiles/CPU_Monitor.dir/src/analyzer.c.o -c /home/adam/Pers/CPU_Monitor/src/analyzer.c",
   "file": "/home/adam/Pers/CPU_Monitor/src/analyzer.c"
 },
 {
   "directory": "/home/adam/Pers/CPU_Monitor/build",
-  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -o CMakeFiles/CPU_Monitor.dir/src/main.c.o -c /home/adam/Pers/CPU_Monitor/src/main.c",
+  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -Wno-unused-parameter -o CMakeFiles/CPU_Monitor.dir/src/main.c.o -c /home/adam/Pers/CPU_Monitor/src/main.c",
   "file": "/home/adam/Pers/CPU_Monitor/src/main.c"
 },
 {
   "directory": "/home/adam/Pers/CPU_Monitor/build",
-  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -o CMakeFiles/CPU_Monitor.dir/src/printer.c.o -c /home/adam/Pers/CPU_Monitor/src/printer.c",
+  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -Wno-unused-parameter -o CMakeFiles/CPU_Monitor.dir/src/printer.c.o -c /home/adam/Pers/CPU_Monitor/src/printer.c",
   "file": "/home/adam/Pers/CPU_Monitor/src/printer.c"
 },
 {
   "directory": "/home/adam/Pers/CPU_Monitor/build",
-  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -o CMakeFiles/CPU_Monitor.dir/src/queue.c.o -c /home/adam/Pers/CPU_Monitor/src/queue.c",
+  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -Wno-unused-parameter -o CMakeFiles/CPU_Monitor.dir/src/queue.c.o -c /home/adam/Pers/CPU_Monitor/src/queue.c",
   "file": "/home/adam/Pers/CPU_Monitor/src/queue.c"
 },
 {
   "directory": "/home/adam/Pers/CPU_Monitor/build",
-  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -o CMakeFiles/CPU_Monitor.dir/src/reader.c.o -c /home/adam/Pers/CPU_Monitor/src/reader.c",
+  "command": "/usr/bin/clang-12 -I../headers -g -Wall -Wextra -Weverything -Wno-vla -Wno-unused-parameter -o CMakeFiles/CPU_Monitor.dir/src/reader.c.o -c /home/adam/Pers/CPU_Monitor/src/reader.c",
   "file": "/home/adam/Pers/CPU_Monitor/src/reader.c"
 }
 ]

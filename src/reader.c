@@ -95,16 +95,16 @@ static char* reader_rFile_to_buffer(void)
 void*  reader_task(void *arg)
 {   
     
-    queue_RA_data** RA_data = (queue_RA_data**)(arg);
-    pthread_mutex_t* mutex = (*RA_data)->mutex;
-    sem_t* RA_Full = (*RA_data)->RA_Full;
-    sem_t* RA_Empty = (*RA_data)->RA_Empty;
+    queue_RA_data* RA_data = queue_get_RA_data_instance();
+    pthread_mutex_t* mutex = RA_data->mutex;
+    sem_t* RA_Full = RA_data->RA_Full;
+    sem_t* RA_Empty = RA_data->RA_Empty;
     while(reader_control)
     {
         
         if(reader_open_file())
         {
-            (*RA_data)->status = 1;
+            RA_data->status = 1;
             return NULL;
         }
 
@@ -115,13 +115,13 @@ void*  reader_task(void *arg)
         if(scannedData == NULL)
         {
             fprintf(stderr, "Error, retriveing data from function failed, exiting\n");
-            (*RA_data)->status = reader_status_failure;
+            RA_data->status = reader_status_failure;
             return NULL;
 
         }
         queue_enqueue_RA(scannedData, last_read_Data_Size_Multiplier);
-        (*RA_data)->status = 2;
-        pthread_mutex_unlock((*RA_data)->mutex);
+        RA_data->status = 2;
+        pthread_mutex_unlock(RA_data->mutex);
         sem_post(RA_Full);
         if(!is_read)
         {
@@ -134,15 +134,15 @@ void*  reader_task(void *arg)
     }
     if(!is_read)
     {
-        (*RA_data)->status = 3;
+        RA_data->status = 3;
         
     }
     else 
     {
-        (*RA_data)->status = 0;
+        RA_data->status = 0;
     }
     sem_post(RA_Full);
-    pthread_exit(NULL);
+    return NULL;
 }
 
 

@@ -7,6 +7,7 @@ file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/adam/Pers/CPU_Monitor/src/*.c")
 set(OLD_GLOB
   "/home/adam/Pers/CPU_Monitor/src/analyzer.c"
   "/home/adam/Pers/CPU_Monitor/src/main.c"
+  "/home/adam/Pers/CPU_Monitor/src/printer.c"
   "/home/adam/Pers/CPU_Monitor/src/queue.c"
   "/home/adam/Pers/CPU_Monitor/src/reader.c"
   )

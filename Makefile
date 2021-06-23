@@ -178,6 +178,30 @@ src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/main.c.s
 .PHONY : src/main.c.s
 
+src/printer.o: src/printer.c.o
+.PHONY : src/printer.o
+
+# target to build an object file
+src/printer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/printer.c.o
+.PHONY : src/printer.c.o
+
+src/printer.i: src/printer.c.i
+.PHONY : src/printer.i
+
+# target to preprocess a source file
+src/printer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/printer.c.i
+.PHONY : src/printer.c.i
+
+src/printer.s: src/printer.c.s
+.PHONY : src/printer.s
+
+# target to generate assembly for a file
+src/printer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/printer.c.s
+.PHONY : src/printer.c.s
+
 src/queue.o: src/queue.c.o
 .PHONY : src/queue.o
 
@@ -241,6 +265,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/printer.o"
+	@echo "... src/printer.i"
+	@echo "... src/printer.s"
 	@echo "... src/queue.o"
 	@echo "... src/queue.i"
 	@echo "... src/queue.s"

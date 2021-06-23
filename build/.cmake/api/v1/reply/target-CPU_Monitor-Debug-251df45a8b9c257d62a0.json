@@ -73,6 +73,10 @@
 				{
 					"backtrace" : 3,
 					"fragment" : "-Wno-vla"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-Wno-unused-parameter"
 				}
 			],
 			"includes" : 
