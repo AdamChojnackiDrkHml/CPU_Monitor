@@ -5,6 +5,7 @@
 #include <string.h>
 #include "../headers/printer.h"
 #include "../headers/queue.h"
+#include "../headers/logger.h"
 #include "../headers/global.h"
 
 static unsigned short cpus_counter = 0;
@@ -31,18 +32,19 @@ void* printer_task(void *arg)
     pthread_mutex_t* mutex = AP_data->mutex;
     sem_t* AP_Full = AP_data->AP_Full;
     sem_t* AP_Empty = AP_data->AP_Empty;
-    write(0,"u",1);
 
+    logger_log("PRINTER : Initialized shared data\n");
+    
     sem_wait(AP_Full);
     pthread_mutex_lock(mutex);
         
     if(AP_data->status == 3 || AP_data->status == 0)
     {
-        write(0,"a",1);
+
         pthread_mutex_unlock(mutex);
         pthread_exit(NULL);
     }
-    write(0,"d",1);
+
     cpus_counter = AP_data->num_of_CPUs;
     curr_record = queue_dequeue_AP();
     printer_local_data = (double*)calloc(cpus_counter ,sizeof(double));
@@ -52,7 +54,10 @@ void* printer_task(void *arg)
 
     pthread_mutex_unlock(mutex);
     sem_post(AP_Empty);
+    logger_log("PRINTER : Scanned first data\n");
+
     printer_printf_data();
+    logger_log("PRINTER : Printed first data\n");
 
     while(printer_control)
     {
@@ -69,10 +74,14 @@ void* printer_task(void *arg)
         curr_record->data = NULL;
         pthread_mutex_unlock(mutex);
         sem_post(AP_Empty);
+        logger_log("PRINTER : Recieved data\n");
+
         printer_printf_data();
+        logger_log("PRINTER : Printed data\n");
 
     }
     free(printer_local_data);
+    logger_log("PRINTER : Freed all recources, exiting\n");
     end_succes = 1;
     return NULL;
 }

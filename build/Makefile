@@ -65,26 +65,6 @@ CMAKE_BINARY_DIR = /home/adam/Pers/CPU_Monitor/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-.PHONY : edit_cache/fast
-
-# Special rule for the target package_source
-package_source:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/adam/Pers/CPU_Monitor/build/CPackSourceConfig.cmake
-.PHONY : package_source
-
-# Special rule for the target package_source
-package_source/fast: package_source
-.PHONY : package_source/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -95,15 +75,15 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target package
-package: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	/usr/bin/cpack --config ./CPackConfig.cmake
-.PHONY : package
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
 
-# Special rule for the target package
-package/fast: package
-.PHONY : package/fast
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -174,6 +154,30 @@ src/analyzer.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/analyzer.c.s
 .PHONY : src/analyzer.c.s
 
+src/logger.o: src/logger.c.o
+.PHONY : src/logger.o
+
+# target to build an object file
+src/logger.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/logger.c.o
+.PHONY : src/logger.c.o
+
+src/logger.i: src/logger.c.i
+.PHONY : src/logger.i
+
+# target to preprocess a source file
+src/logger.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/logger.c.i
+.PHONY : src/logger.c.i
+
+src/logger.s: src/logger.c.s
+.PHONY : src/logger.s
+
+# target to generate assembly for a file
+src/logger.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/logger.c.s
+.PHONY : src/logger.c.s
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -197,6 +201,30 @@ src/main.s: src/main.c.s
 src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/main.c.s
 .PHONY : src/main.c.s
+
+src/printer.o: src/printer.c.o
+.PHONY : src/printer.o
+
+# target to build an object file
+src/printer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/printer.c.o
+.PHONY : src/printer.c.o
+
+src/printer.i: src/printer.c.i
+.PHONY : src/printer.i
+
+# target to preprocess a source file
+src/printer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/printer.c.i
+.PHONY : src/printer.c.i
+
+src/printer.s: src/printer.c.s
+.PHONY : src/printer.s
+
+# target to generate assembly for a file
+src/printer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPU_Monitor.dir/build.make CMakeFiles/CPU_Monitor.dir/src/printer.c.s
+.PHONY : src/printer.c.s
 
 src/queue.o: src/queue.c.o
 .PHONY : src/queue.o
@@ -253,16 +281,20 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
-	@echo "... package"
-	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... CPU_Monitor"
 	@echo "... src/analyzer.o"
 	@echo "... src/analyzer.i"
 	@echo "... src/analyzer.s"
+	@echo "... src/logger.o"
+	@echo "... src/logger.i"
+	@echo "... src/logger.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/printer.o"
+	@echo "... src/printer.i"
+	@echo "... src/printer.s"
 	@echo "... src/queue.o"
 	@echo "... src/queue.i"
 	@echo "... src/queue.s"

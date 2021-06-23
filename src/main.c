@@ -13,13 +13,16 @@
 #include "../headers/analyzer.h"
 #include "../headers/printer.h"
 #include "../headers/queue.h"
+#include "../headers/logger.h"
 #include "../headers/global.h"
-static pthread_t Reader, Analyzer, Printer;
-static pthread_mutex_t RA_Mutex, AP_Mutex;
-static sem_t RA_Empty, RA_Full, AP_Empty, AP_Full;
+static pthread_t Reader, Analyzer, Printer, Logger;
+static pthread_mutex_t RA_Mutex, AP_Mutex, log_Mutex;
+static sem_t RA_Empty, RA_Full, AP_Empty, AP_Full, log_Empty, log_Full;
 
 static unsigned short RA_Mutex_Flag, RA_Empty_Flag, RA_Full_Flag;
 static unsigned short AP_Mutex_Flag, AP_Empty_Flag, AP_Full_Flag;
+static unsigned short log_Mutex_Flag, log_Empty_Flag, log_Full_Flag;
+
 static volatile sig_atomic_t done  = 0;
 
 
@@ -41,25 +44,24 @@ static void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag)
 
 static noreturn void end_protocol(unsigned short exit_status)
 {
-    pthread_mutex_lock(&RA_Mutex);
-    pthread_mutex_unlock(&RA_Mutex);
     queue_destroy_RA_data();
     queue_destroy_AP_data();
+    queue_destroy_log_data();
     destroy_mutex(&RA_Mutex, RA_Mutex_Flag);
     destroy_mutex(&AP_Mutex, AP_Mutex_Flag);
+    destroy_mutex(&log_Mutex, log_Mutex_Flag);
     destroy_semaphore(&RA_Full, RA_Full_Flag);
     destroy_semaphore(&RA_Empty,RA_Empty_Flag);
     destroy_semaphore(&AP_Full, AP_Full_Flag);
     destroy_semaphore(&AP_Empty,AP_Empty_Flag);
+    destroy_semaphore(&log_Full, log_Full_Flag);
+    destroy_semaphore(&log_Empty,log_Empty_Flag);
     exit(exit_status);
 }
 
 static void terminate_handler(int n)
 {
-    printf("should be dead\n");
     done = 1;
-    write(0, "\nProgram End\n", 13);
-    write(0, &n, 1);
 }
 
 static noreturn void exit_error(char error_message[static 1])
@@ -79,7 +81,7 @@ int main(void)
     }
     RA_Mutex_Flag = 1;
 
-    if(sem_init(&RA_Empty,0,queue_size) != 0)
+    if(sem_init(&RA_Empty,0,default_queue_size) != 0)
     {
         exit_error("Error creating empty semaphore, exiting from main \n");
     }
@@ -97,7 +99,7 @@ int main(void)
     }
     AP_Mutex_Flag = 1;
 
-    if(sem_init(&AP_Empty,0,queue_size) != 0)
+    if(sem_init(&AP_Empty,0,default_queue_size) != 0)
     {
         exit_error("Error creating empty semaphore, exiting from main \n");
     }
@@ -108,10 +110,29 @@ int main(void)
         exit_error("Error creating full semaphore, exiting from main \n");
     }
     AP_Full_Flag = 1;
+
+    if(pthread_mutex_init(&log_Mutex, NULL) != 0)
+    {
+        exit_error("Error creating mutex, exiting from main \n");
+    }
+    log_Mutex_Flag = 1;
+
+    if(sem_init(&log_Empty,0,logger_queue_size) != 0)
+    {
+        exit_error("Error creating empty semaphore, exiting from main \n");
+    }
+    log_Empty_Flag = 1;
+
+    if(sem_init(&log_Full,0,0) != 0)
+    {
+        exit_error("Error creating full semaphore, exiting from main \n");
+    }
+    log_Full_Flag = 1;
     
     
     queue_create_RA_data(&RA_Mutex, &RA_Full, &RA_Empty);
     queue_create_AP_data(&AP_Mutex, &AP_Full, &AP_Empty);
+    queue_create_log_data(&log_Mutex, &log_Full, &log_Empty);
 
     if(queue_is_RA_data_null())
     {
@@ -123,11 +144,18 @@ int main(void)
         exit_error("Error creating RA_data, exiting from main\n");
     }
 
-  
+    if(queue_is_log_data_null())
+    {
+        exit_error("Error creating log_data, exiting from main\n");
+    }
+
+    pthread_create(&Logger, NULL, &logger_task, NULL);
     pthread_create(&Reader, NULL, &reader_task, NULL);
     pthread_create(&Analyzer, NULL, &analyzer_task, NULL);
     pthread_create(&Printer, NULL, &printer_task, NULL);
-    sleep(3);
+
+
+    while(!done);
     reader_call_exit(); 
     pthread_join(Reader, NULL); 
     printf("reader dead\n");
@@ -138,7 +166,11 @@ int main(void)
 
     printer_call_exit();
     pthread_join(Printer, NULL);
-        printf("printer dead\n");
+    printf("printer dead\n");
+
+    logger_call_exit();
+    pthread_join(Logger, NULL);
+    printf("logger dead\n");
 
     printf("THIS IS HOW I DO IT\n");
     end_protocol(EXIT_SUCCESS);

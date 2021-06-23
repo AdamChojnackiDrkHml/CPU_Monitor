@@ -1,5 +1,7 @@
 #include "../headers/analyzer.h"
 #include "../headers/global.h"
+#include "../headers/logger.h"
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +10,7 @@
 static size_t analyzer_control = 1;
 static const size_t analyzer_control_end = 0;
 static volatile size_t end_succes = 0;
-static const size_t analyzer_status_succes = 0;
-static const size_t analyzer_status_failure = 1;
+static const int analyzer_status_succes = 0;
 
 static size_t* userData = NULL;
 static size_t* niceData = NULL;
@@ -108,6 +109,7 @@ void* analyzer_task(void *arg)
     sem_t* AP_Empty = AP_data->AP_Empty;
     //INITIAL PROCESS
    
+    logger_log("ANALYZER : Initialized shared data\n");
 
 
     cpus_counter = 0;
@@ -141,7 +143,6 @@ void* analyzer_task(void *arg)
         softirqData = ( size_t*)calloc(cpus_counter, sizeof(size_t));
         stealData = ( size_t*)calloc(cpus_counter, sizeof(size_t));
         results = analyzer_interpreter();
-        write(0,"WAIT",4);
 
 
         sem_wait(AP_Empty);
@@ -153,9 +154,10 @@ void* analyzer_task(void *arg)
         sem_post(AP_Full);
         
         results = NULL;
+        logger_log("ANALYZER : Initialized working data\n");
 
 
-        write(0,"AP_POST",7);
+
         is_analyzed = 1;
         if(userData == NULL || niceData == NULL || systemData == NULL || idleData == NULL || iowaitData == NULL || irqData == NULL || softirqData  == NULL || stealData  == NULL)
         {
@@ -179,8 +181,10 @@ void* analyzer_task(void *arg)
             curr_record->data = NULL;
             pthread_mutex_unlock(RA_mutex);
             sem_post(RA_Empty);
+            logger_log("ANALYZER : Recieved data\n");
 
             results = analyzer_interpreter();
+            logger_log("ANALYZER : Analyzed data\n");
 
             sem_wait(AP_Empty);
             pthread_mutex_lock(AP_mutex);
@@ -189,13 +193,13 @@ void* analyzer_task(void *arg)
             AP_data->status = 2;
             pthread_mutex_unlock(AP_mutex);
             sem_post(AP_Full);
+            logger_log("ANALYZER : Send data to print\n");
 
             results = NULL;
 
         }
 
         fflush( stdout );
-        printf("IAM OUT");
         free(userData);
         free(niceData);
         free(systemData);
@@ -212,7 +216,6 @@ void* analyzer_task(void *arg)
         irqData = NULL;
         softirqData = NULL;
         stealData = NULL;
-        printf("All Freed");
     }
     if(!is_analyzed)
     {
@@ -224,6 +227,7 @@ void* analyzer_task(void *arg)
         AP_data->status = 0;
     }
     sem_post(AP_Full);
+    logger_log("ANALYZER : Freed all recources, exiting\n");
     end_succes = 1;
     return NULL;
 }

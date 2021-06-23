@@ -55,5 +55,13 @@ extern queue_AP_record* queue_dequeue_AP(void);
 extern queue_AP_data* queue_get_AP_data_instance(void);
 extern size_t queue_is_AP_data_null(void);
 
+extern void queue_create_log_data(pthread_mutex_t* mutex, sem_t* log_Full, sem_t* log_Empty);
+extern void queue_destroy_log_data(void);
+extern void queue_enqueue_log(char* data, unsigned short size);
+extern queue_RA_record* queue_dequeue_log(void);
+extern queue_RA_data* queue_get_log_data_instance(void);
+extern size_t queue_is_log_data_null(void);
+
+
 
 #endif
