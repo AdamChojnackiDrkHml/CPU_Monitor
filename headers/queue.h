@@ -4,63 +4,60 @@
 #include "pthread.h"
 #include <semaphore.h>
 
-typedef struct queue_RA_record
+static enum status_type{STATUS_SAFE_END, STATUS_ERROR_END, STATUS_WORKING, STATUS_END_BEFORE_WRITE,STATUS_NULL} status_type;
+
+typedef struct queue_string_data_record
 {
-    char* data;
+    char* string_data;
     unsigned short size;
     char pad[6];
-} queue_RA_record;
+} queue_string_data_record;
 
-typedef struct queue_RA_data 
+typedef struct queue_string_data 
 {
     pthread_mutex_t* mutex;
-    sem_t* RA_Empty;
-    sem_t* RA_Full;
-    queue_RA_record** data;
+    sem_t* string_data_sem_Empty;
+    sem_t* string_data_sem_Full;
+    queue_string_data_record** string_data_arr;
     unsigned short status;
     unsigned short in;
     unsigned short out;
     char pad[2];
-} queue_RA_data;
+} queue_string_data;
 
-typedef struct queue_AP_record
+typedef struct queue_number_data_record
 {
-    double* data;
-} queue_AP_record;
+    double* number_data;
+} queue_number_data_record;
 
-typedef struct queue_AP_data 
+typedef struct queue_number_data 
 {
     pthread_mutex_t* mutex;
-    sem_t* AP_Empty;
-    sem_t* AP_Full;
-    queue_AP_record** data;
+    sem_t* number_data_sem_Empty;
+    sem_t* number_data_sem_Full;
+    queue_number_data_record** number_data_arr;
     unsigned short status;
     unsigned short in;
     unsigned short out;
     unsigned short num_of_CPUs;
-} queue_AP_data;
+} queue_number_data;
+
+extern void queue_create_all(pthread_mutex_t mutexes[3], sem_t sem_full[3],sem_t sem_empty[3]);
+extern void queue_destroy_all(void);
+extern size_t queue_check_null_all(void);
 
 
-extern void queue_create_RA_data(pthread_mutex_t* mutex, sem_t* RA_Full, sem_t* RA_Empty);
-extern void queue_destroy_RA_data(void);
 extern void queue_enqueue_RA(char* data, unsigned short size);
-extern queue_RA_record* queue_dequeue_RA(void);
-extern queue_RA_data* queue_get_RA_data_instance(void);
-extern size_t queue_is_RA_data_null(void);
+extern queue_string_data_record* queue_dequeue_RA(void);
+extern queue_string_data* queue_get_RA_data_instance(void);
 
-extern void queue_create_AP_data(pthread_mutex_t* mutex, sem_t* AP_Full, sem_t* AP_Empty);
-extern void queue_destroy_AP_data(void);
 extern void queue_enqueue_AP(double* data);
-extern queue_AP_record* queue_dequeue_AP(void);
-extern queue_AP_data* queue_get_AP_data_instance(void);
-extern size_t queue_is_AP_data_null(void);
+extern queue_number_data_record* queue_dequeue_AP(void);
+extern queue_number_data* queue_get_AP_data_instance(void);
 
-extern void queue_create_log_data(pthread_mutex_t* mutex, sem_t* log_Full, sem_t* log_Empty);
-extern void queue_destroy_log_data(void);
 extern void queue_enqueue_log(char* data, unsigned short size);
-extern queue_RA_record* queue_dequeue_log(void);
-extern queue_RA_data* queue_get_log_data_instance(void);
-extern size_t queue_is_log_data_null(void);
+extern queue_string_data_record* queue_dequeue_log(void);
+extern queue_string_data* queue_get_log_data_instance(void);
 
 
 
