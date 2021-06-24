@@ -8,22 +8,113 @@
 #include "../headers/logger.h"
 #include "../headers/watchdog.h"
 
+
+
+
+//Reader working variables
 static FILE *fp;
-
-
-static const size_t reader_status_succes = 0;
-static const size_t reader_status_failure = 1;
-static volatile size_t end_succes = 0;
+static volatile size_t end_state = THREAD_WORKING;
 static const size_t max_fopen_tries = 5;
-
 static size_t reader_control = 1;
-static const size_t reader_control_end = 0;
 static unsigned short last_read_Data_Size_Multiplier = 1;
-static unsigned short is_read = 0;
+static unsigned short is_read = FAILURE;
+char* scannedData = NULL;
 
-static int counter = 0;
+//Shared data and synchronization structures
+static queue_string_data* RA_data;
+static pthread_mutex_t* RA_mutex;
+static sem_t* RA_Full;
+static sem_t* RA_Empty;
+
+static void reader_init_data(void);
+static size_t reader_reset_data(void);
+static size_t reader_open_file(void);
+static size_t reader_close_file(void);
+static char* reader_rFile_to_buffer(void);
+
+void* reader_task(void *arg)
+{   
+    reader_init_data();
+
+    logger_log("READER : Initialized shared data\n");
+
+    while(reader_control)
+    {
+        watchdog_set_me_alive(Reader_ID);
+        if(reader_open_file())
+        {
+            RA_data->status = STATUS_ERROR_END;
+            break;
+        }
+        logger_log("READER : opened file\n");
+
+        scannedData = reader_rFile_to_buffer();
+        watchdog_set_me_alive(Reader_ID);
+
+        sem_wait(RA_Empty);
+        pthread_mutex_lock(RA_mutex);
+        if(scannedData == NULL)
+        {
+            logger_log("READER : Error, retriveing data from function failed, exiting\n");
+            RA_data->status = STATUS_ERROR_END;
+            break;
+        }
+        queue_enqueue_RA(scannedData, last_read_Data_Size_Multiplier);
+        RA_data->status = STATUS_WORKING;
+        pthread_mutex_unlock(RA_mutex);
+        sem_post(RA_Full);
+        
+        watchdog_set_me_alive(Reader_ID);
+        logger_log("READER : put data in queue\n");
+        
+        if(reader_reset_data())
+        {
+            RA_data->status = STATUS_ERROR_END;
+            break;
+        }
+        logger_log("READER : closed file\n");
 
 
+        if(is_read == FAILURE)
+        {
+            is_read = SUCCESS;
+        }
+        
+        sleep(1);
+    }
+
+    if(is_read == FAILURE)
+    {
+        RA_data->status = STATUS_END_BEFORE_WRITE;
+    }
+    else 
+    {
+        RA_data->status = STATUS_SAFE_END;
+    }
+    sem_post(RA_Full);
+    logger_log("READER : Freed all recources, exiting\n");
+
+    while(reader_control);
+
+    end_state = THREAD_END;
+    return NULL;
+}
+
+
+static void reader_init_data(void)
+{
+    RA_data = queue_get_RA_data_instance();
+    RA_mutex = RA_data->mutex;
+    RA_Full = RA_data->string_data_sem_Full;
+    RA_Empty = RA_data->string_data_sem_Empty;
+}
+
+static size_t reader_reset_data(void)
+{
+    scannedData = NULL;
+    last_read_Data_Size_Multiplier = 1;
+    return reader_close_file();
+}
 
 static size_t reader_open_file(void)
 {
@@ -33,23 +124,22 @@ static size_t reader_open_file(void)
         fp = fopen("/proc/stat", "r");
         if (fp != NULL)
         {
-            return reader_status_succes;
+            return SUCCESS;
         }
         logger_log("READER : Error openning /proc/stat\n");
     }
     logger_log("READER : 5th time failure openning file, exiting \n");
-    return reader_status_failure;
+    return FAILURE;
 }
 
-
-static int reader_close_file(void)
+static size_t reader_close_file(void)
 {
     if(fclose(fp) == EOF)
     {
-        return reader_status_failure;
+        return FAILURE;
     }
     fp = NULL;
-    return reader_status_succes;
+    return SUCCESS;
 }
 
 static char* reader_rFile_to_buffer(void)
@@ -63,7 +153,7 @@ static char* reader_rFile_to_buffer(void)
         return NULL;
     }
 
-    char* buffer = (char*)malloc(sizeof(char)*data_chunk_size);
+    char* buffer = (char*)malloc(sizeof(char)*DATA_CHUNK_SIZE);
     if(buffer == NULL)
     {
         logger_log("READER : Error, failed allocating memory for 256 bytes buffer, exiting \n");
@@ -73,9 +163,9 @@ static char* reader_rFile_to_buffer(void)
 
     strcpy(readData, "");
 
-    while(fgets(buffer,data_chunk_size, fp) != NULL )
+    while(fgets(buffer,DATA_CHUNK_SIZE, fp) != NULL )
     {
-        char* temp = (char*)malloc(sizeof(char) * ((data_chunk_size * last_read_Data_Size_Multiplier) + 1));
+        char* temp = (char*)malloc(sizeof(char) * ((DATA_CHUNK_SIZE * last_read_Data_Size_Multiplier) + 1));
         if(temp == NULL)
         {
             logger_log("READER : Error, failed reallocating memory for extended data buffer, exiting \n");
@@ -96,84 +186,10 @@ static char* reader_rFile_to_buffer(void)
 }
 
 
-
-void*  reader_task(void *arg)
-{   
-    
-    queue_RA_data* RA_data = queue_get_RA_data_instance();
-    pthread_mutex_t* RA_mutex = RA_data->mutex;
-    sem_t* RA_Full = RA_data->RA_Full;
-    sem_t* RA_Empty = RA_data->RA_Empty;
-    logger_log("READER : Initialized shared data\n");
-    watchdog_set_me_alive(Reader_ID);
-
-    while(reader_control)
-    {
-        watchdog_set_me_alive(Reader_ID);
-        
-        if(reader_open_file())
-        {
-            RA_data->status = 1;
-            return NULL;
-        }
-        logger_log("READER : opened file\n");
-        char* scannedData = reader_rFile_to_buffer();
-        watchdog_set_me_alive(Reader_ID);
-
-        sem_wait(RA_Empty);
-        pthread_mutex_lock(RA_mutex);
-        if(scannedData == NULL)
-        {
-            logger_log("READER : Error, retriveing data from function failed, exiting\n");
-            RA_data->status = reader_status_failure;
-            return NULL;
-
-        }
-        queue_enqueue_RA(scannedData, last_read_Data_Size_Multiplier);
-        RA_data->status = 2;
-        pthread_mutex_unlock(RA_mutex);
-        sem_post(RA_Full);
-        watchdog_set_me_alive(Reader_ID);
-
-        logger_log("READER : put data in queue\n");
-        if(!is_read)
-        {
-            is_read = 1;
-        }
-        last_read_Data_Size_Multiplier = 1;
-        reader_close_file();
-        logger_log("READER : closed file\n");
-        scannedData = NULL;
-        if(counter < 3)
-        {
-            sleep(1);
-        }
-        else
-        {
-            sleep(3);
-        }
-        counter++;
-    }
-    if(!is_read)
-    {
-        RA_data->status = 3;
-        
-    }
-    else 
-    {
-        RA_data->status = 0;
-    }
-    sem_post(RA_Full);
-    logger_log("READER : Freed all recources, exiting\n");
-    end_succes = 1;
-    return NULL;
-}
-
-
 void reader_call_exit(void)
 {
-    reader_control = reader_control_end;
-    while(!end_succes);
+    reader_control = END_THREAD;
+    while(end_state == THREAD_WORKING);
 }
 
 
