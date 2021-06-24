@@ -12,6 +12,7 @@ static volatile size_t end_state = THREAD_WORKING;
 static volatile _Atomic(char) data_flag = 0;
 static volatile size_t logger_control = 1;
 static const size_t max_fopen_tries = 5;
+static size_t logger_file_open_flag = FAILURE;
 static char* logger_local_data = NULL;
 static FILE * fd;
 
@@ -53,7 +54,7 @@ void* logger_task(void * arg)
         }
         watchdog_set_me_alive(Logger_ID);
     }
-    
+    logger_reset_data();
     while(logger_control);
     end_state = THREAD_END;
     return NULL;
@@ -96,6 +97,7 @@ static size_t logger_open_file(void)
         fd = fopen("../logs.txt", "a+");
         if (fd != NULL)
         {
+            logger_file_open_flag = SUCCESS;
             return SUCCESS;
         }
     }
@@ -105,10 +107,16 @@ static size_t logger_open_file(void)
 
 static size_t logger_close_file(void)
 {
+    
+    if(logger_file_open_flag)
+    {
+        return SUCCESS;
+    }
     if(fclose(fd) == EOF)
     {
         return FAILURE;
     }
+    logger_file_open_flag = FAILURE;
     fd = NULL;
     return SUCCESS;
 }

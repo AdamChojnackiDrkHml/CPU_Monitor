@@ -8,9 +8,6 @@
 #include "../headers/logger.h"
 #include "../headers/watchdog.h"
 
-
-
-
 //Reader working variables
 static FILE *fp;
 static volatile size_t end_state = THREAD_WORKING;
@@ -18,7 +15,8 @@ static const size_t max_fopen_tries = 5;
 static size_t reader_control = 1;
 static unsigned short last_read_Data_Size_Multiplier = 1;
 static unsigned short is_read = FAILURE;
-char* scannedData = NULL;
+static char* scannedData = NULL;
+static size_t reader_file_open_flag = FAILURE;
 
 //Shared data and synchronization structures
 static queue_string_data* RA_data;
@@ -93,7 +91,7 @@ void* reader_task(void *arg)
     }
     sem_post(RA_Full);
     logger_log("READER : Freed all recources, exiting\n");
-
+    reader_reset_data();
     while(reader_control);
 
     end_state = THREAD_END;
@@ -123,7 +121,8 @@ static size_t reader_open_file(void)
     {
         fp = fopen("/proc/stat", "r");
         if (fp != NULL)
-        {
+        {   
+            reader_file_open_flag = SUCCESS;
             return SUCCESS;
         }
         logger_log("READER : Error openning /proc/stat\n");
@@ -134,10 +133,15 @@ static size_t reader_open_file(void)
 
 static size_t reader_close_file(void)
 {
+    if(reader_file_open_flag)
+    {
+        return SUCCESS;
+    }
     if(fclose(fp) == EOF)
     {
         return FAILURE;
     }
+    reader_file_open_flag = FAILURE;
     fp = NULL;
     return SUCCESS;
 }
