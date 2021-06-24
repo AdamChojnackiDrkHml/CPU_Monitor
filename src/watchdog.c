@@ -25,7 +25,7 @@ static volatile _Atomic(char) watchdog_check[NUM_OF_THREADS_TO_WATCH] = {0,0,0,0
 void* watchdog_task(void* arg)
 {
 
-    while(watchdog_control)
+    while(watchdog_control && !state)
     {
         sleep(watchdog_check_time);
         for(size_t i = 0; i < NUM_OF_THREADS_TO_WATCH; i++)

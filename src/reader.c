@@ -30,7 +30,7 @@ static size_t reader_reset_data(void);
 static size_t reader_open_file(void);
 static size_t reader_close_file(void);
 static char* reader_rFile_to_buffer(void);
-static size_t reader_send_to_analyzer(void);
+static void reader_send_to_analyzer(void);
 
 void* reader_task(void *arg)
 {   
@@ -51,11 +51,15 @@ void* reader_task(void *arg)
         scannedData = reader_rFile_to_buffer();
         watchdog_set_me_alive(Reader_ID);
 
-
-        if(reader_send_to_analyzer())
+        if(scannedData == NULL)
         {
+            logger_log("READER : Error, retriveing data from function failed, exiting\n");
+            is_error = SUCCESS;
+            RA_data->status = STATUS_ERROR_END;
             break;
         }
+        reader_send_to_analyzer();
+        
         watchdog_set_me_alive(Reader_ID);
         logger_log("READER : put data in queue\n");
         
@@ -93,7 +97,7 @@ void* reader_task(void *arg)
 }
 
 
-static void reader_init_data(void)
+void reader_init_data(void)
 {
     RA_data = queue_get_RA_data_instance();
     RA_mutex = RA_data->mutex;
@@ -101,14 +105,14 @@ static void reader_init_data(void)
     RA_Empty = RA_data->string_data_sem_Empty;
 }
 
-static size_t reader_reset_data(void)
+size_t reader_reset_data(void)
 {
     scannedData = NULL;
     last_read_Data_Size_Multiplier = 1;
     return reader_close_file();
 }
 
-static size_t reader_open_file(void)
+size_t reader_open_file(void)
 {
 
     for(size_t i = 1; i <= max_fopen_tries; i++)
@@ -125,7 +129,7 @@ static size_t reader_open_file(void)
     return FAILURE;
 }
 
-static size_t reader_close_file(void)
+size_t reader_close_file(void)
 {
     if(reader_file_open_flag)
     {
@@ -140,7 +144,7 @@ static size_t reader_close_file(void)
     return SUCCESS;
 }
 
-static char* reader_rFile_to_buffer(void)
+char* reader_rFile_to_buffer(void)
 {
     
     char* readData = (char*)malloc(sizeof(char));
@@ -155,7 +159,7 @@ static char* reader_rFile_to_buffer(void)
     if(buffer == NULL)
     {
         logger_log("READER : Error, failed allocating memory for 256 bytes buffer, exiting \n");
-        free(buffer);
+        free(readData);
         return NULL;
     }
 
@@ -182,22 +186,15 @@ static char* reader_rFile_to_buffer(void)
     buffer = NULL;
     return readData;
 }
-static size_t reader_send_to_analyzer(void)
+
+void reader_send_to_analyzer(void)
 {
     sem_wait(RA_Empty);
     pthread_mutex_lock(RA_mutex);
-    if(scannedData == NULL)
-    {
-        logger_log("READER : Error, retriveing data from function failed, exiting\n");
-        is_error = SUCCESS;
-        RA_data->status = STATUS_ERROR_END;
-        return FAILURE;
-    }
     queue_enqueue_RA(scannedData, last_read_Data_Size_Multiplier);
     RA_data->status = STATUS_WORKING;
     pthread_mutex_unlock(RA_mutex);
     sem_post(RA_Full);
-    return SUCCESS;
 }
 
 void reader_call_exit(void)

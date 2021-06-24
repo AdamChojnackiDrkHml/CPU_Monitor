@@ -84,6 +84,7 @@ static void printer_init_data(void)
 static void printer_printf_data(void)
 {
     fflush(stdout);
+    
     for(size_t i = 0; i < cpus_counter; i++)
     {
         printf("CPU %zu\t %0.2lf%%\n", i, printer_local_data[i]);

@@ -42,7 +42,6 @@ static void analyzer_free_data(void);
 void* analyzer_task(void *arg)
 {
     analyzer_init_data();
-    //INITIAL PROCESS
    
     logger_log("ANALYZER : Initialized shared data\n");
 
@@ -95,7 +94,6 @@ void* analyzer_task(void *arg)
             watchdog_set_me_alive(Analyzer_ID);
         }
         while(analyzer_control);
-        fflush( stdout );
         analyzer_free_data();
     }
     if(is_analyzed == FAILURE)
@@ -176,14 +174,14 @@ void analyzer_free_data(void)
     
 }
 
-size_t analyzer_get_data_from_reader(size_t is_frist_scan)
+size_t analyzer_get_data_from_reader(size_t is_first_scan)
 {
-    if(!is_frist_scan)
+    if(!is_first_scan)
     {
         sem_wait(RA_Full);
         pthread_mutex_lock(RA_mutex);
     }
-    if(!is_frist_scan && RA_data->status == STATUS_SAFE_END)
+    if(!is_first_scan && RA_data->status == STATUS_SAFE_END)
     {
         pthread_mutex_unlock(RA_mutex);
         return FAILURE;
