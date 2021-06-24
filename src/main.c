@@ -1,11 +1,6 @@
-
-#include <stdio.h>
-#include <fcntl.h>
-#include <string.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdnoreturn.h>
@@ -37,13 +32,18 @@ static unsigned short sem_full_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {failure, 
 //Variable used to terminate program after SIGTERM is send
 static volatile sig_atomic_t done  = 0;
 
+//Exit handling functions
 static noreturn void exit_error(char error_message[static 1]);
 static noreturn void end_protocol(unsigned short exit_status);
+
+//Shared data and synchronization structures initializiers
 static void create_mutexes(void);
 static void create_sem_full(void);
 static void create_sem_empty(void);
 static void create_synchronizers(void);
 static void create_shared_data(void);
+
+//Shared data and synchronization structures destructors
 static void destroy_semaphore(sem_t* sem, unsigned short sem_flag);
 static void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag);
 static void destroy_mutexes(void);
@@ -51,6 +51,8 @@ static void destroy_sem_full(void);
 static void destroy_sem_empty(void);
 static void destroy_synchronizers(void);
 static void destroy_shared_data(void);
+
+//SIGTERM handler
 static void terminate_handler(int n);
 
 int main(void)
@@ -59,8 +61,6 @@ int main(void)
     printf("%d\n", getpid());
    
     create_shared_data();
-
-    
 
     for(size_t i = Logger_ID; i < NUMBER_OF_THREADS; i++)
     {
@@ -211,7 +211,6 @@ void destroy_shared_data(void)
 noreturn void end_protocol(unsigned short exit_status)
 {
     destroy_shared_data();
-
     exit(exit_status);
 }
 
