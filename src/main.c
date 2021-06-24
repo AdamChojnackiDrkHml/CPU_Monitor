@@ -94,11 +94,11 @@ static void create_mutexes(void)
 {
     for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
     {
-        if(pthread_mutex_init(&mutexes[i], NULL) != succes)
+        if(pthread_mutex_init(&mutexes[i], NULL) != success)
         {
             exit_error("Error creating mutex, exiting from main \n");
         }
-        mutex_flags[i] = succes;
+        mutex_flags[i] = success;
         
     }
 }
@@ -107,11 +107,11 @@ static void create_sem_full(void)
 {
     for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
     {   
-        if(sem_init(&sem_full[i],0,sem_full_size) != succes)
+        if(sem_init(&sem_full[i],0,sem_full_size) != success)
         {
             exit_error("Error creating full semaphore, exiting from main \n");
         }
-        sem_full_flags[i] = succes;
+        sem_full_flags[i] = success;
     }
 }
 
@@ -122,7 +122,7 @@ static void create_sem_empty(void)
 
         if(i != LOG_ID)
         {
-            if(sem_init(&sem_empty[i],0,default_queue_size) != succes)
+            if(sem_init(&sem_empty[i],0,default_queue_size) != success)
             {
                 exit_error("Error creating full semaphore, exiting from main \n");
             }
@@ -130,12 +130,12 @@ static void create_sem_empty(void)
         }
         else
         {
-            if(sem_init(&sem_empty[i],0,logger_queue_size) != succes)
+            if(sem_init(&sem_empty[i],0,logger_queue_size) != success)
             {
                 exit_error("Error creating full semaphore, exiting from main \n");
             }
         }
-        sem_empty_flags[i] = succes;
+        sem_empty_flags[i] = success;
     }
 }
 
