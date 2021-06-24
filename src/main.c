@@ -25,9 +25,9 @@ static sem_t sem_full[NUMBER_OF_SHARED_DATA_OBJECTS];
 static sem_t sem_empty[NUMBER_OF_SHARED_DATA_OBJECTS];
 
 //Thread synchronization structures flags arrays
-static unsigned short mutex_flags[NUMBER_OF_SHARED_DATA_OBJECTS]= {failure, failure, failure};
-static unsigned short sem_empty_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {failure, failure, failure};
-static unsigned short sem_full_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {failure, failure, failure};
+static unsigned short mutex_flags[NUMBER_OF_SHARED_DATA_OBJECTS]= {FAILURE, FAILURE, FAILURE};
+static unsigned short sem_empty_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {FAILURE, FAILURE, FAILURE};
+static unsigned short sem_full_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {FAILURE, FAILURE, FAILURE};
 
 //Variable used to terminate program after SIGTERM is send
 static volatile sig_atomic_t done  = 0;
@@ -67,8 +67,8 @@ int main(void)
         pthread_create(&threads[i],NULL, thread_functions[i], NULL);
     }
 
-    while(!done && watchdog_raport());
-    //sleep(10);
+    while(!done && !watchdog_raport());
+    //sleep(3);
 
     exit_functions[Watchdog_ID]();
     pthread_join(threads[Watchdog_ID],NULL);
@@ -94,11 +94,11 @@ static void create_mutexes(void)
 {
     for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
     {
-        if(pthread_mutex_init(&mutexes[i], NULL) != success)
+        if(pthread_mutex_init(&mutexes[i], NULL) != SUCCESS)
         {
             exit_error("Error creating mutex, exiting from main \n");
         }
-        mutex_flags[i] = success;
+        mutex_flags[i] = SUCCESS;
         
     }
 }
@@ -107,11 +107,11 @@ static void create_sem_full(void)
 {
     for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
     {   
-        if(sem_init(&sem_full[i],0,sem_full_size) != success)
+        if(sem_init(&sem_full[i],0,SEM_FULL_SIZE) != SUCCESS)
         {
             exit_error("Error creating full semaphore, exiting from main \n");
         }
-        sem_full_flags[i] = success;
+        sem_full_flags[i] = SUCCESS;
     }
 }
 
@@ -122,7 +122,7 @@ static void create_sem_empty(void)
 
         if(i != LOG_ID)
         {
-            if(sem_init(&sem_empty[i],0,default_queue_size) != success)
+            if(sem_init(&sem_empty[i],0,DEFAULT_QUEUE_SIZE) != SUCCESS)
             {
                 exit_error("Error creating full semaphore, exiting from main \n");
             }
@@ -130,12 +130,12 @@ static void create_sem_empty(void)
         }
         else
         {
-            if(sem_init(&sem_empty[i],0,logger_queue_size) != success)
+            if(sem_init(&sem_empty[i],0,LOGGER_QUEUE_SIZE) != SUCCESS)
             {
                 exit_error("Error creating full semaphore, exiting from main \n");
             }
         }
-        sem_empty_flags[i] = success;
+        sem_empty_flags[i] = SUCCESS;
     }
 }
 

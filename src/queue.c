@@ -20,8 +20,8 @@ static void queue_create_RA_data(pthread_mutex_t* mutex, sem_t* sem_Full, sem_t*
 static void queue_create_log_data(pthread_mutex_t* mutex, sem_t* sem_Full, sem_t* sem_Empty);
 static void queue_destroy_RA_data(void);
 static void queue_destroy_log_data(void);
-static size_t queue_is_RA_data_null();
-static size_t queue_is_log_data_null();
+static size_t queue_is_RA_data_null(void);
+static size_t queue_is_log_data_null(void);
 static void queue_create_AP_data(pthread_mutex_t* mutex, sem_t* AP_Full, sem_t* AP_Empty);
 static void queue_destroy_AP_data(void);
 static size_t queue_is_AP_data_null(void);

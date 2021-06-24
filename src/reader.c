@@ -15,6 +15,7 @@ static const size_t max_fopen_tries = 5;
 static size_t reader_control = 1;
 static unsigned short last_read_Data_Size_Multiplier = 1;
 static unsigned short is_read = FAILURE;
+static unsigned short is_error = FAILURE;
 static char* scannedData = NULL;
 static size_t reader_file_open_flag = FAILURE;
 
@@ -29,6 +30,7 @@ static size_t reader_reset_data(void);
 static size_t reader_open_file(void);
 static size_t reader_close_file(void);
 static char* reader_rFile_to_buffer(void);
+static size_t reader_send_to_analyzer(void);
 
 void* reader_task(void *arg)
 {   
@@ -49,19 +51,11 @@ void* reader_task(void *arg)
         scannedData = reader_rFile_to_buffer();
         watchdog_set_me_alive(Reader_ID);
 
-        sem_wait(RA_Empty);
-        pthread_mutex_lock(RA_mutex);
-        if(scannedData == NULL)
+
+        if(reader_send_to_analyzer())
         {
-            logger_log("READER : Error, retriveing data from function failed, exiting\n");
-            RA_data->status = STATUS_ERROR_END;
             break;
         }
-        queue_enqueue_RA(scannedData, last_read_Data_Size_Multiplier);
-        RA_data->status = STATUS_WORKING;
-        pthread_mutex_unlock(RA_mutex);
-        sem_post(RA_Full);
-        
         watchdog_set_me_alive(Reader_ID);
         logger_log("READER : put data in queue\n");
         
@@ -85,7 +79,7 @@ void* reader_task(void *arg)
     {
         RA_data->status = STATUS_END_BEFORE_WRITE;
     }
-    else 
+    else if(is_error == FAILURE)
     {
         RA_data->status = STATUS_SAFE_END;
     }
@@ -188,7 +182,23 @@ static char* reader_rFile_to_buffer(void)
     buffer = NULL;
     return readData;
 }
-
+static size_t reader_send_to_analyzer(void)
+{
+    sem_wait(RA_Empty);
+    pthread_mutex_lock(RA_mutex);
+    if(scannedData == NULL)
+    {
+        logger_log("READER : Error, retriveing data from function failed, exiting\n");
+        is_error = SUCCESS;
+        RA_data->status = STATUS_ERROR_END;
+        return FAILURE;
+    }
+    queue_enqueue_RA(scannedData, last_read_Data_Size_Multiplier);
+    RA_data->status = STATUS_WORKING;
+    pthread_mutex_unlock(RA_mutex);
+    sem_post(RA_Full);
+    return SUCCESS;
+}
 
 void reader_call_exit(void)
 {
