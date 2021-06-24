@@ -1,3 +1,0 @@
-/home/adam/Pers/CPU_Monitor/CMakeFiles/rebuild_cache.dir
-/home/adam/Pers/CPU_Monitor/CMakeFiles/edit_cache.dir
-/home/adam/Pers/CPU_Monitor/CMakeFiles/CPU_Monitor.dir
