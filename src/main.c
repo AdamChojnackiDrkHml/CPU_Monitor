@@ -16,169 +16,213 @@
 #include "../headers/logger.h"
 #include "../headers/watchdog.h"
 #include "../headers/global.h"
-static pthread_t Reader, Analyzer, Printer, Logger, Watchdog;
-static pthread_mutex_t RA_Mutex, AP_Mutex, log_Mutex;
-static sem_t RA_Empty, RA_Full, AP_Empty, AP_Full, log_Empty, log_Full;
 
-static unsigned short RA_Mutex_Flag, RA_Empty_Flag, RA_Full_Flag;
-static unsigned short AP_Mutex_Flag, AP_Empty_Flag, AP_Full_Flag;
-static unsigned short log_Mutex_Flag, log_Empty_Flag, log_Full_Flag;
+//Pthread structs array
+static pthread_t threads[NUMBER_OF_THREADS];
 
+//Pointers to threads start and end functions
+static void* (*thread_functions[NUMBER_OF_THREADS])(void *) = {&logger_task, &reader_task, &analyzer_task, &printer_task, &watchdog_task};
+static void (*exit_functions[NUMBER_OF_THREADS])(void) = {logger_call_exit, reader_call_exit,analyzer_call_exit,printer_call_exit,watchdog_call_exit};
+
+//Thread synchronization structures arrays
+static pthread_mutex_t mutexes[NUMBER_OF_SHARED_DATA_OBJECTS];
+static sem_t sem_full[NUMBER_OF_SHARED_DATA_OBJECTS];
+static sem_t sem_empty[NUMBER_OF_SHARED_DATA_OBJECTS];
+
+//Thread synchronization structures flags arrays
+static unsigned short mutex_flags[NUMBER_OF_SHARED_DATA_OBJECTS]= {failure, failure, failure};
+static unsigned short sem_empty_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {failure, failure, failure};
+static unsigned short sem_full_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {failure, failure, failure};
+
+//Variable used to terminate program after SIGTERM is send
 static volatile sig_atomic_t done  = 0;
 
-
-static void destroy_semaphore(sem_t* sem, unsigned short sem_flag)
-{
-    if(sem_flag)
-    {
-        sem_destroy(sem);
-    }
-}
-
-static void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag)
-{
-    if(mtx_flag)
-    {
-        pthread_mutex_destroy(mutex);
-    }
-}
-
-static noreturn void end_protocol(unsigned short exit_status)
-{
-    queue_destroy_RA_data();
-    queue_destroy_AP_data();
-    queue_destroy_log_data();
-    destroy_mutex(&RA_Mutex, RA_Mutex_Flag);
-    destroy_mutex(&AP_Mutex, AP_Mutex_Flag);
-    destroy_mutex(&log_Mutex, log_Mutex_Flag);
-    destroy_semaphore(&RA_Full, RA_Full_Flag);
-    destroy_semaphore(&RA_Empty,RA_Empty_Flag);
-    destroy_semaphore(&AP_Full, AP_Full_Flag);
-    destroy_semaphore(&AP_Empty,AP_Empty_Flag);
-    destroy_semaphore(&log_Full, log_Full_Flag);
-    destroy_semaphore(&log_Empty,log_Empty_Flag);
-    exit(exit_status);
-}
-
-static void terminate_handler(int n)
-{
-    done = 1;
-}
-
-static noreturn void exit_error(char error_message[static 1])
-{
-    printf("%s", error_message);
-    end_protocol(EXIT_FAILURE);
-}
+static noreturn void exit_error(char error_message[static 1]);
+static noreturn void end_protocol(unsigned short exit_status);
+static void create_mutexes(void);
+static void create_sem_full(void);
+static void create_sem_empty(void);
+static void create_synchronizers(void);
+static void create_shared_data(void);
+static void destroy_semaphore(sem_t* sem, unsigned short sem_flag);
+static void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag);
+static void destroy_mutexes(void);
+static void destroy_sem_full(void);
+static void destroy_sem_empty(void);
+static void destroy_synchronizers(void);
+static void destroy_shared_data(void);
+static void terminate_handler(int n);
 
 int main(void)
 {
     signal(SIGTERM, *terminate_handler);
     printf("%d\n", getpid());
    
-    if(pthread_mutex_init(&RA_Mutex, NULL) != 0)
-    {
-        exit_error("Error creating mutex, exiting from main \n");
-    }
-    RA_Mutex_Flag = 1;
+    create_shared_data();
 
-    if(sem_init(&RA_Empty,0,default_queue_size) != 0)
-    {
-        exit_error("Error creating empty semaphore, exiting from main \n");
-    }
-    RA_Empty_Flag = 1;
-
-    if(sem_init(&RA_Full,0,0) != 0)
-    {
-        exit_error("Error creating full semaphore, exiting from main \n");
-    }
-    RA_Full_Flag = 1;
-
-    if(pthread_mutex_init(&AP_Mutex, NULL) != 0)
-    {
-        exit_error("Error creating mutex, exiting from main \n");
-    }
-    AP_Mutex_Flag = 1;
-
-    if(sem_init(&AP_Empty,0,default_queue_size) != 0)
-    {
-        exit_error("Error creating empty semaphore, exiting from main \n");
-    }
-    AP_Empty_Flag = 1;
-
-    if(sem_init(&AP_Full,0,0) != 0)
-    {
-        exit_error("Error creating full semaphore, exiting from main \n");
-    }
-    AP_Full_Flag = 1;
-
-    if(pthread_mutex_init(&log_Mutex, NULL) != 0)
-    {
-        exit_error("Error creating mutex, exiting from main \n");
-    }
-    log_Mutex_Flag = 1;
-
-    if(sem_init(&log_Empty,0,logger_queue_size) != 0)
-    {
-        exit_error("Error creating empty semaphore, exiting from main \n");
-    }
-    log_Empty_Flag = 1;
-
-    if(sem_init(&log_Full,0,0) != 0)
-    {
-        exit_error("Error creating full semaphore, exiting from main \n");
-    }
-    log_Full_Flag = 1;
     
-    
-    queue_create_RA_data(&RA_Mutex, &RA_Full, &RA_Empty);
-    queue_create_AP_data(&AP_Mutex, &AP_Full, &AP_Empty);
-    queue_create_log_data(&log_Mutex, &log_Full, &log_Empty);
 
-    if(queue_is_RA_data_null())
+    for(size_t i = Logger_ID; i < NUMBER_OF_THREADS; i++)
     {
-        exit_error("Error creating RA_data, exiting from main\n");
+        pthread_create(&threads[i],NULL, thread_functions[i], NULL);
     }
-
-    if(queue_is_AP_data_null())
-    {
-        exit_error("Error creating RA_data, exiting from main\n");
-    }
-
-    if(queue_is_log_data_null())
-    {
-        exit_error("Error creating log_data, exiting from main\n");
-    }
-
-    pthread_create(&Logger, NULL, &logger_task, NULL);
-    pthread_create(&Reader, NULL, &reader_task, NULL);
-    pthread_create(&Analyzer, NULL, &analyzer_task, NULL);
-    pthread_create(&Printer, NULL, &printer_task, NULL);
-    pthread_create(&Watchdog, NULL, &watchdog_task, NULL);
 
     while(!done && watchdog_raport());
+    //sleep(10);
 
-    watchdog_call_exit();
-    pthread_join(Watchdog, NULL);
-    printf("watchdog dead\n");
+    exit_functions[Watchdog_ID]();
+    pthread_join(threads[Watchdog_ID],NULL);
+    printf("%s thread dead\n", thread_names[Watchdog_ID]);
 
-    reader_call_exit(); 
-    pthread_join(Reader, NULL); 
-    printf("reader dead\n");
+    for(size_t i = Reader_ID; i < NUMBER_OF_THREADS - 1; i++)
+    {
+        exit_functions[i]();
+        pthread_join(threads[i], NULL);
+        printf("%s thread dead\n", thread_names[i]);
+    }
 
-    analyzer_call_exit();
-    pthread_join(Analyzer, NULL);
-    printf("analyzer dead\n");
+    exit_functions[Logger_ID]();
+    pthread_join(threads[Logger_ID],NULL);
+    printf("%s thread dead\n", thread_names[Logger_ID]);
 
-    printer_call_exit();
-    pthread_join(Printer, NULL);
-    printf("printer dead\n");
-
-    logger_call_exit();
-    pthread_join(Logger, NULL);
-    printf("logger dead\n");
-
-    printf("THIS IS HOW I DO IT\n");
+    printf("All end succes\n");
     end_protocol(EXIT_SUCCESS);
 
+}
+
+static void create_mutexes(void)
+{
+    for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
+    {
+        if(pthread_mutex_init(&mutexes[i], NULL) != succes)
+        {
+            exit_error("Error creating mutex, exiting from main \n");
+        }
+        mutex_flags[i] = succes;
+        
+    }
+}
+
+static void create_sem_full(void)
+{
+    for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
+    {   
+        if(sem_init(&sem_full[i],0,sem_full_size) != succes)
+        {
+            exit_error("Error creating full semaphore, exiting from main \n");
+        }
+        sem_full_flags[i] = succes;
+    }
+}
+
+static void create_sem_empty(void)
+{
+    for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
+    {
+
+        if(i != LOG_ID)
+        {
+            if(sem_init(&sem_empty[i],0,default_queue_size) != succes)
+            {
+                exit_error("Error creating full semaphore, exiting from main \n");
+            }
+       
+        }
+        else
+        {
+            if(sem_init(&sem_empty[i],0,logger_queue_size) != succes)
+            {
+                exit_error("Error creating full semaphore, exiting from main \n");
+            }
+        }
+        sem_empty_flags[i] = succes;
+    }
+}
+
+void create_synchronizers(void)
+{
+    create_mutexes();
+    create_sem_empty();
+    create_sem_full();
+}
+
+void create_shared_data(void)
+{
+    create_synchronizers();
+    queue_create_all(mutexes, sem_full, sem_empty);
+    if(queue_check_null_all())
+    {
+        exit_error("Error creating shared data, exiting");
+    }
+}
+void destroy_semaphore(sem_t* sem, unsigned short sem_flag)
+{
+    if(!sem_flag)
+    {
+        sem_destroy(sem);
+    }
+}
+
+void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag)
+{
+    if(!mtx_flag)
+    {
+        pthread_mutex_destroy(mutex);
+    }
+}
+
+void destroy_mutexes(void)
+{
+    for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
+    {
+        destroy_mutex(&mutexes[i], mutex_flags[i]);
+    }
+}
+
+void destroy_sem_full(void)
+{
+    for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
+    {
+        destroy_semaphore(&sem_full[i], sem_full_flags[i]);
+    }
+}
+
+void destroy_sem_empty(void)
+{
+    for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
+    {
+        destroy_semaphore(&sem_empty[i], sem_empty_flags[i]);
+    }
+}
+
+void destroy_synchronizers(void)
+{
+    destroy_mutexes();
+    destroy_sem_empty();
+    destroy_sem_full();
+}
+
+void destroy_shared_data(void)
+{
+    destroy_synchronizers();
+    queue_destroy_all();
+}
+
+noreturn void end_protocol(unsigned short exit_status)
+{
+    destroy_shared_data();
+
+    exit(exit_status);
+}
+
+void terminate_handler(int n)
+{
+    write(0,"recieved signal",16);
+    done = 1;
+}
+
+noreturn void exit_error(char error_message[static 1])
+{
+    printf("%s", error_message);
+    end_protocol(EXIT_FAILURE);
 }
