@@ -29,7 +29,7 @@ static size_t queue_is_AP_data_null(void);
 static void (*queues_constructors[NUMBER_OF_SHARED_DATA_OBJECTS])(pthread_mutex_t* mutex, sem_t* sem_full, sem_t* sem_empty) = { queue_create_RA_data,queue_create_AP_data,queue_create_log_data};
 static void (*queues_destructors[NUMBER_OF_SHARED_DATA_OBJECTS])(void) = { queue_destroy_RA_data,queue_destroy_AP_data,queue_destroy_log_data};
 
-static void queue_create_string_data(pthread_mutex_t* mutex, sem_t* sem_Full, sem_t* sem_Empty, size_t isLogger)
+void queue_create_string_data(pthread_mutex_t* mutex, sem_t* sem_Full, sem_t* sem_Empty, size_t isLogger)
 {
     queue_string_data* newData = (queue_string_data*)calloc(1, sizeof(queue_string_data));
     unsigned short queue_size = isLogger ? LOGGER_QUEUE_SIZE : DEFAULT_QUEUE_SIZE;
@@ -72,7 +72,7 @@ static void queue_create_string_data(pthread_mutex_t* mutex, sem_t* sem_Full, se
     }
 }
 
-static void queue_destroy_string_data(size_t isLogger)
+void queue_destroy_string_data(size_t isLogger)
 {
     queue_string_data* to_destroy = isLogger ? log_data : RA_data;
     unsigned short queue_size = isLogger ? LOGGER_QUEUE_SIZE : DEFAULT_QUEUE_SIZE;
@@ -112,7 +112,7 @@ static void queue_destroy_string_data(size_t isLogger)
     }
 }
 
-static void queue_enqueue_string(char* data, unsigned short size, size_t isLogger)
+void queue_enqueue_string(char* data, unsigned short size, size_t isLogger)
 {
     if(isLogger)
     {
@@ -129,7 +129,7 @@ static void queue_enqueue_string(char* data, unsigned short size, size_t isLogge
 
 }
 
-static queue_string_data_record* queue_dequeue_string(size_t isLogger)
+queue_string_data_record* queue_dequeue_string(size_t isLogger)
 {
     if (isLogger)
     {
@@ -143,12 +143,12 @@ static queue_string_data_record* queue_dequeue_string(size_t isLogger)
     }
 }
 
-static queue_string_data* queue_get_string_data_instance(size_t isLogger)
+queue_string_data* queue_get_string_data_instance(size_t isLogger)
 {
     return isLogger ? log_data : RA_data;
 }
 
-static size_t queue_is_string_data_null(size_t isLogger)
+size_t queue_is_string_data_null(size_t isLogger)
 {
     queue_string_data* to_check = isLogger ? log_data : RA_data;
     if(to_check == NULL)

@@ -58,17 +58,19 @@ void* analyzer_task(void *arg)
         watchdog_set_me_alive(Analyzer_ID);
 
         analyzer_get_data_from_reader(analyzer_first_scan);
-
+        logger_log("ANALYZER : Recieved first data from reader\n");
         watchdog_set_me_alive(Analyzer_ID);
 
         cpus_counter = analyzer_count_CPUs();
+        logger_log("ANALYZER : Counted CPUs\n");
+        
         analyzer_alloc_memory_for_CPU_data();
         results = analyzer_interpreter();
         analyzer_send_to_printer();
         watchdog_set_me_alive(Analyzer_ID);
 
         results = NULL;
-        logger_log("ANALYZER : Initialized working data\n");
+        logger_log("ANALYZER : Send first data to printer\n");
         watchdog_set_me_alive(Analyzer_ID);
 
 
@@ -85,6 +87,10 @@ void* analyzer_task(void *arg)
             logger_log("ANALYZER : Recieved data\n");
 
             results = analyzer_interpreter();
+            if(results == NULL)
+            {
+                break;
+            }
             logger_log("ANALYZER : Analyzed data\n");
 
             analyzer_send_to_printer();
@@ -99,12 +105,10 @@ void* analyzer_task(void *arg)
     if(is_analyzed == FAILURE)
     {
         AP_data->status = STATUS_END_BEFORE_WRITE;
-        write(0,"a",1);
     }
     else 
     {
         AP_data->status = STATUS_SAFE_END;
-        write(0,"b",1);
     }
     sem_post(AP_Full);
     logger_log("ANALYZER : Freed all recources, exiting\n");
@@ -188,6 +192,13 @@ size_t analyzer_get_data_from_reader(size_t is_first_scan)
     }
     curr_record = queue_dequeue_RA();
     analyzer_local_data = (char*)calloc(curr_record->size * DATA_CHUNK_SIZE + 1,sizeof(char));
+    if(analyzer_local_data == NULL)
+    {
+        free(curr_record->string_data);
+        curr_record->string_data = NULL;
+        pthread_mutex_unlock(RA_mutex);
+        return FAILURE;
+    }
     strcpy(analyzer_local_data,curr_record->string_data);
     free(curr_record->string_data);
     curr_record->string_data = NULL;
@@ -213,9 +224,15 @@ unsigned short analyzer_count_CPUs(void)
     return counter;
 }
 
-double*  analyzer_interpreter(void)
+double* analyzer_interpreter(void)
 {
         double * interpreted = ( double*)calloc(cpus_counter, sizeof(double));
+        if(interpreted == NULL)
+        {
+            free(analyzer_local_data);
+            analyzer_local_data = NULL;
+            return NULL;
+        }
         char* line_beg_ptr = NULL;
         char* line_end_ptr = NULL;
         line_beg_ptr = analyzer_local_data;
@@ -261,6 +278,7 @@ double*  analyzer_interpreter(void)
 void analyzer_call_exit(void)
 {
     analyzer_control = END_THREAD;
+    logger_log("MAIN in ANALYZER :  Recieved signal to end\n");
     while(end_state == THREAD_WORKING);
 }
 

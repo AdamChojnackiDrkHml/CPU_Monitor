@@ -151,7 +151,7 @@ char* reader_rFile_to_buffer(void)
 
     if(readData == NULL)
     {
-       logger_log("READER : Error, failed allocating memory for readData, exiting \n");
+        logger_log("READER : Error, failed allocating memory for readData, exiting \n");
         return NULL;
     }
 
@@ -200,6 +200,7 @@ void reader_send_to_analyzer(void)
 void reader_call_exit(void)
 {
     reader_control = END_THREAD;
+    logger_log("MAIN in READER :  Recieved signal to end\n");
     while(end_state == THREAD_WORKING);
 }
 

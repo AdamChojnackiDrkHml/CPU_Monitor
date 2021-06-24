@@ -100,6 +100,11 @@ static size_t printer_get_data(size_t is_first_scan)
     {
         cpus_counter = AP_data->num_of_CPUs;
         printer_local_data = (double*)calloc(cpus_counter ,sizeof(double));
+        if(printer_local_data == NULL)
+        {
+            pthread_mutex_unlock(mutex);
+            return FAILURE;
+        }
     }
     if(!is_first_scan)
     {
@@ -124,5 +129,6 @@ static size_t printer_get_data(size_t is_first_scan)
 void printer_call_exit(void)
 {
     printer_control = END_THREAD;
+    logger_log("MAIN in PRINTER :  Recieved signal to end\n");
     while(end_state == THREAD_WORKING);
 }

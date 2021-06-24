@@ -126,7 +126,6 @@ static void create_sem_empty(void)
             {
                 exit_error("Error creating full semaphore, exiting from main \n");
             }
-       
         }
         else
         {

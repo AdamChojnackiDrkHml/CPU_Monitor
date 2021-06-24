@@ -27,6 +27,7 @@ void* watchdog_task(void* arg)
 
     while(watchdog_control && !state)
     {
+        logger_log("WATCHDOG :  GOING SLEEP\n");
         sleep(watchdog_check_time);
         for(size_t i = 0; i < NUM_OF_THREADS_TO_WATCH; i++)
         {
@@ -38,7 +39,6 @@ void* watchdog_task(void* arg)
                 break;
             }
 
-            
             watchdog_check[i] = thread_state_unknown;
         }
     }
@@ -50,6 +50,7 @@ void* watchdog_task(void* arg)
 void watchdog_call_exit(void)
 {
     watchdog_control = END_THREAD;
+    logger_log("MAIN in WATCHDOG : Recieved signal to end\n");
     while(end_state == THREAD_WORKING);
 }
 

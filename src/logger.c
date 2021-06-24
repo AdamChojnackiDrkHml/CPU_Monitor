@@ -71,6 +71,13 @@ size_t logger_recieve_data(void)
     }
     current_record = queue_dequeue_log();
     logger_local_data = (char*)calloc(MAX_LOG_SIZE,sizeof(char));
+    if(logger_local_data == NULL)
+    {
+        free(current_record->string_data);
+        current_record->string_data = NULL;
+        pthread_mutex_unlock(mutex);
+        return FAILURE;
+    }
     strcpy(logger_local_data,current_record->string_data);
     free(current_record->string_data);
     current_record->string_data = NULL;
@@ -148,6 +155,10 @@ void logger_log(char* log)
         return;
     }
     char* to_log = (char*)calloc(MAX_LOG_SIZE, sizeof(char));
+    if(to_log == NULL)
+    {
+        return;
+    }
     strcpy(to_log, log);
     sem_wait(sem_Empty);
     pthread_mutex_lock(mutex);
