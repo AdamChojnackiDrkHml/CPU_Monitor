@@ -34,10 +34,11 @@ void* watchdog_task(void* arg)
             {
                 state = watchdog_thread_is_dead;
                 printf("%zu thread is dead\n", i);
+                logger_log("WATCHDOG : THREAD IS DEAD!\n");
                 break;
             }
 
-            logger_log("WATCHDOG : THREAD IS DEAD!\n");
+            
             watchdog_check[i] = thread_state_unknown;
         }
     }
