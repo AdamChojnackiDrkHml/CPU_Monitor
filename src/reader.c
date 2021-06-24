@@ -12,7 +12,7 @@
 static FILE *fp;
 static volatile size_t end_state = THREAD_WORKING;
 static const size_t max_fopen_tries = 5;
-static size_t reader_control = 1;
+static volatile size_t reader_control = 1;
 static unsigned short last_read_Data_Size_Multiplier = 1;
 static unsigned short is_read = FAILURE;
 static unsigned short is_error = FAILURE;

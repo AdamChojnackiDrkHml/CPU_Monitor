@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static size_t analyzer_control = 1;
+static volatile size_t analyzer_control = 1;
 static volatile size_t end_state = THREAD_WORKING;
 static size_t analyzer_num_of_data_to_analyze = 8;
 static size_t analyzer_first_scan = 1;
