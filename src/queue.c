@@ -32,7 +32,7 @@ static void (*queues_destructors[NUMBER_OF_SHARED_DATA_OBJECTS])(void) = { queue
 static void queue_create_string_data(pthread_mutex_t* mutex, sem_t* sem_Full, sem_t* sem_Empty, size_t isLogger)
 {
     queue_string_data* newData = (queue_string_data*)calloc(1, sizeof(queue_string_data));
-    unsigned short queue_size = isLogger ? logger_queue_size : default_queue_size;
+    unsigned short queue_size = isLogger ? LOGGER_QUEUE_SIZE : DEFAULT_QUEUE_SIZE;
     if(newData == NULL)
     {
         fprintf(stderr, "Error allocating memory for queue_RA_data struct, exiting\n");
@@ -75,7 +75,7 @@ static void queue_create_string_data(pthread_mutex_t* mutex, sem_t* sem_Full, se
 static void queue_destroy_string_data(size_t isLogger)
 {
     queue_string_data* to_destroy = isLogger ? log_data : RA_data;
-    unsigned short queue_size = isLogger ? logger_queue_size : default_queue_size;
+    unsigned short queue_size = isLogger ? LOGGER_QUEUE_SIZE : DEFAULT_QUEUE_SIZE;
     if(to_destroy == NULL)
     {
         return;
@@ -116,13 +116,13 @@ static void queue_enqueue_string(char* data, unsigned short size, size_t isLogge
 {
     if(isLogger)
     {
-        unsigned short new_index = log_data->in++ & (logger_queue_size-1);
+        unsigned short new_index = log_data->in++ & (LOGGER_QUEUE_SIZE-1);
         log_data->string_data_arr[new_index]->string_data = data;
         log_data->string_data_arr[new_index]->size = size;
     }
     else
     {
-        unsigned short new_index = RA_data->in++ & (default_queue_size-1);
+        unsigned short new_index = RA_data->in++ & (DEFAULT_QUEUE_SIZE-1);
         RA_data->string_data_arr[new_index]->string_data = data;
         RA_data->string_data_arr[new_index]->size = size;
     }
@@ -133,13 +133,13 @@ static queue_string_data_record* queue_dequeue_string(size_t isLogger)
 {
     if (isLogger)
     {
-        unsigned short out_index = log_data->out++ & (logger_queue_size-1);
+        unsigned short out_index = log_data->out++ & (LOGGER_QUEUE_SIZE-1);
         queue_string_data_record* ret = log_data->string_data_arr[out_index];
         return ret;
     }
     else
     {
-        return RA_data->string_data_arr[RA_data->out++ & (default_queue_size-1)];
+        return RA_data->string_data_arr[RA_data->out++ & (DEFAULT_QUEUE_SIZE-1)];
     }
 }
 
@@ -153,9 +153,9 @@ static size_t queue_is_string_data_null(size_t isLogger)
     queue_string_data* to_check = isLogger ? log_data : RA_data;
     if(to_check == NULL)
     {
-        return failure;
+        return FAILURE;
     }
-    return success;
+    return SUCCESS;
 }
 
 void queue_create_RA_data(pthread_mutex_t* mutex, sem_t* sem_Full, sem_t* sem_Empty)
@@ -229,13 +229,13 @@ void queue_create_AP_data(pthread_mutex_t* mutex, sem_t* AP_Full, sem_t* AP_Empt
         fprintf(stderr, "Error allocating memory for queue_AP_data struct, exiting\n");
         return;
     }
-    queue_number_data_record** arr = (queue_number_data_record**)calloc(default_queue_size, sizeof(queue_number_data_record*));
+    queue_number_data_record** arr = (queue_number_data_record**)calloc(DEFAULT_QUEUE_SIZE, sizeof(queue_number_data_record*));
     if(arr == NULL)
     {
         fprintf(stderr, "Error allocating memory for circular queue array, exiting\n");
         return;
     }
-    for(size_t i = 0; i < default_queue_size; i++)
+    for(size_t i = 0; i < DEFAULT_QUEUE_SIZE; i++)
     {
         queue_number_data_record* new_record = (queue_number_data_record*)calloc(1, sizeof(queue_number_data_record));
         if(arr == NULL)
@@ -262,7 +262,7 @@ void queue_destroy_AP_data(void)
     {
         return;
     }
-    for(size_t i = 0; i < default_queue_size; i++)
+    for(size_t i = 0; i < DEFAULT_QUEUE_SIZE; i++)
     {
         if(AP_data->number_data_arr[i] != NULL)
         {
@@ -287,13 +287,13 @@ void queue_destroy_AP_data(void)
 
 void queue_enqueue_AP(double* data)
 {
-    unsigned short new_index = AP_data->in++ & (default_queue_size-1);
+    unsigned short new_index = AP_data->in++ & (DEFAULT_QUEUE_SIZE-1);
     AP_data->number_data_arr[new_index]->number_data = data;
 }
 
 queue_number_data_record* queue_dequeue_AP(void)
 {
-    unsigned short out_index = AP_data->out++ & (default_queue_size-1);
+    unsigned short out_index = AP_data->out++ & (DEFAULT_QUEUE_SIZE-1);
     return AP_data->number_data_arr[out_index];
 }
 
@@ -306,9 +306,9 @@ size_t queue_is_AP_data_null(void)
 {
     if(AP_data == NULL)
     {
-        return failure;
+        return FAILURE;
     }
-    return success;
+    return SUCCESS;
 }
 
 
@@ -333,18 +333,18 @@ size_t queue_check_null_all(void)
     if(queue_is_RA_data_null())
     {
         printf("Error creating RA_data, exiting from main\n");
-        return failure;
+        return FAILURE;
     }
     if(queue_is_AP_data_null())
     {
         printf("Error creating RA_data, exiting from main\n");
-        return failure;
+        return FAILURE;
     }
     if(queue_is_log_data_null())
     {
         printf("Error creating log_data, exiting from main\n");
-        return failure;
+        return FAILURE;
     }
-    return success;
+    return SUCCESS;
 }
 
