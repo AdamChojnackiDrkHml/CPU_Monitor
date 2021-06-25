@@ -32,10 +32,6 @@ static unsigned short sem_full_flags[NUMBER_OF_SHARED_DATA_OBJECTS] = {FAILURE, 
 //Variable used to terminate program after SIGTERM is send
 static volatile sig_atomic_t done  = 0;
 
-//Exit handling functions
-static noreturn void exit_error(char error_message[static 1]);
-static noreturn void end_protocol(unsigned short exit_status);
-
 //Shared data and synchronization structures initializiers
 static void create_mutexes(void);
 static void create_sem_full(void);
@@ -51,6 +47,10 @@ static void destroy_sem_full(void);
 static void destroy_sem_empty(void);
 static void destroy_synchronizers(void);
 static void destroy_shared_data(void);
+
+//Exit handling functions
+static noreturn void end_protocol(unsigned short exit_status);
+static noreturn void exit_error(char error_message[static 1]);
 
 //SIGTERM handler
 static void terminate_handler(int n);
@@ -138,14 +138,14 @@ static void create_sem_empty(void)
     }
 }
 
-void create_synchronizers(void)
+static void create_synchronizers(void)
 {
     create_mutexes();
     create_sem_empty();
     create_sem_full();
 }
 
-void create_shared_data(void)
+static void create_shared_data(void)
 {
     create_synchronizers();
     queue_create_all(mutexes, sem_full, sem_empty);
@@ -154,7 +154,7 @@ void create_shared_data(void)
         exit_error("Error creating shared data, exiting");
     }
 }
-void destroy_semaphore(sem_t* sem, unsigned short sem_flag)
+static void destroy_semaphore(sem_t* sem, unsigned short sem_flag)
 {
     if(!sem_flag)
     {
@@ -162,7 +162,7 @@ void destroy_semaphore(sem_t* sem, unsigned short sem_flag)
     }
 }
 
-void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag)
+static void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag)
 {
     if(!mtx_flag)
     {
@@ -170,7 +170,7 @@ void destroy_mutex(pthread_mutex_t* mutex, unsigned short mtx_flag)
     }
 }
 
-void destroy_mutexes(void)
+static void destroy_mutexes(void)
 {
     for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
     {
@@ -178,7 +178,7 @@ void destroy_mutexes(void)
     }
 }
 
-void destroy_sem_full(void)
+static void destroy_sem_full(void)
 {
     for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
     {
@@ -186,7 +186,7 @@ void destroy_sem_full(void)
     }
 }
 
-void destroy_sem_empty(void)
+static void destroy_sem_empty(void)
 {
     for(size_t i = RA_ID; i < NUMBER_OF_SHARED_DATA_OBJECTS; i++)
     {
@@ -194,33 +194,33 @@ void destroy_sem_empty(void)
     }
 }
 
-void destroy_synchronizers(void)
+static void destroy_synchronizers(void)
 {
     destroy_mutexes();
     destroy_sem_empty();
     destroy_sem_full();
 }
 
-void destroy_shared_data(void)
+static void destroy_shared_data(void)
 {
     destroy_synchronizers();
     queue_destroy_all();
 }
 
-noreturn void end_protocol(unsigned short exit_status)
+static noreturn void end_protocol(unsigned short exit_status)
 {
     destroy_shared_data();
     exit(exit_status);
 }
 
-void terminate_handler(int n)
-{
-    write(0,"recieved signal",16);
-    done = 1;
-}
-
-noreturn void exit_error(char error_message[static 1])
+static noreturn void exit_error(char error_message[static 1])
 {
     printf("%s", error_message);
     end_protocol(EXIT_FAILURE);
+}
+
+static void terminate_handler(int n)
+{
+    write(0,"recieved signal",16);
+    done = 1;
 }

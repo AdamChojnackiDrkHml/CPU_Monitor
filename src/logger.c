@@ -8,20 +8,20 @@
 #include <stdio.h>
 
 //Logger working variables
-static volatile size_t end_state = THREAD_WORKING;
-static volatile _Atomic(char) data_flag = 0;
+static volatile _Atomic(char) logger_data_flag = 0;
 static volatile size_t logger_control = 1;
-static const size_t max_fopen_tries = 5;
+static const size_t logger_max_fopen_tries = 5;
+static volatile size_t logger_end_state = THREAD_WORKING;
 static size_t logger_file_open_flag = FAILURE;
 static char* logger_local_data = NULL;
-static FILE * fd;
+static FILE * logger_fp;
 
 //Shared data and synchronization structures
-static queue_string_data* log_data = NULL;
-static pthread_mutex_t* mutex =  NULL;
-static sem_t* sem_Full =  NULL;
-static sem_t* sem_Empty =  NULL;
-static queue_string_data_record* current_record = NULL;
+static queue_string_data* logger_log_data = NULL;
+static pthread_mutex_t* logger_log_mutex =  NULL;
+static sem_t* logger_log_sem_full =  NULL;
+static sem_t* logger_log_sem_empty =  NULL;
+static queue_string_data_record* logger_curr_record = NULL;
 
 static void logger_init_shared_data(void);
 static size_t logger_open_file(void);
@@ -31,7 +31,6 @@ static size_t logger_recieve_data(void);
 
 void* logger_task(void * arg)
 {   
-
     logger_init_shared_data();
     while(logger_control)
     {
@@ -45,8 +44,8 @@ void* logger_task(void * arg)
             break;
         }
 
-        fflush(fd);
-        fputs(logger_local_data, fd );
+        fflush(logger_fp);
+        fputs(logger_local_data, logger_fp );
 
         if(logger_reset_data())
         {
@@ -56,53 +55,46 @@ void* logger_task(void * arg)
     }
     logger_reset_data();
     while(logger_control);
-    end_state = THREAD_END;
+    logger_end_state = THREAD_END;
     return NULL;
 }
 
-size_t logger_recieve_data(void)
+void logger_log(char* log)
 {
-    sem_wait(sem_Full);
-    pthread_mutex_lock(mutex);
-    if(log_data->status == STATUS_SAFE_END)
+    if(!logger_data_flag)
     {
-        pthread_mutex_unlock(mutex);
-        return FAILURE;
+        return;
     }
-    current_record = queue_dequeue_log();
-    logger_local_data = (char*)calloc(MAX_LOG_SIZE,sizeof(char));
-    if(logger_local_data == NULL)
+    char* to_log = (char*)calloc(MAX_LOG_SIZE, sizeof(char));
+    if(to_log == NULL)
     {
-        free(current_record->string_data);
-        current_record->string_data = NULL;
-        pthread_mutex_unlock(mutex);
-        return FAILURE;
+        return;
     }
-    strcpy(logger_local_data,current_record->string_data);
-    free(current_record->string_data);
-    current_record->string_data = NULL;
-    pthread_mutex_unlock(mutex);
-    sem_post(sem_Empty);
-
-    return SUCCESS;
+    strcpy(to_log, log);
+    sem_wait(logger_log_sem_empty);
+    pthread_mutex_lock(logger_log_mutex);
+    queue_enqueue_log(to_log, MAX_LOG_SIZE);
+    logger_log_data->status = STATUS_WORKING;
+    pthread_mutex_unlock(logger_log_mutex);
+    sem_post(logger_log_sem_full);
 }
 
 static void logger_init_shared_data(void)
 {
-    log_data = queue_get_log_data_instance();
-    mutex = log_data->mutex;
-    sem_Full = log_data->string_data_sem_Full;
-    sem_Empty = log_data->string_data_sem_Empty;
-    data_flag = 1;
+    logger_log_data = queue_get_log_data_instance();
+    logger_log_mutex = logger_log_data->mutex;
+    logger_log_sem_full = logger_log_data->string_data_sem_Full;
+    logger_log_sem_empty = logger_log_data->string_data_sem_Empty;
+    logger_data_flag = 1;
 }
 
 static size_t logger_open_file(void)
 {
 
-    for(size_t i = 1; i <= max_fopen_tries; i++)
+    for(size_t i = 1; i <= logger_max_fopen_tries; i++)
     {
-        fd = fopen("../logs.txt", "a+");
-        if (fd != NULL)
+        logger_fp = fopen("../logs.txt", "a+");
+        if (logger_fp != NULL)
         {
             logger_file_open_flag = SUCCESS;
             return SUCCESS;
@@ -119,12 +111,12 @@ static size_t logger_close_file(void)
     {
         return SUCCESS;
     }
-    if(fclose(fd) == EOF)
+    if(fclose(logger_fp) == EOF)
     {
         return FAILURE;
     }
     logger_file_open_flag = FAILURE;
-    fd = NULL;
+    logger_fp = NULL;
     return SUCCESS;
 }
 
@@ -135,35 +127,44 @@ static size_t logger_reset_data(void)
     return logger_close_file();
 }
 
+static size_t logger_recieve_data(void)
+{
+    watchdog_set_me_alive(Logger_ID);
+
+    sem_wait(logger_log_sem_full);
+    pthread_mutex_lock(logger_log_mutex);
+    if(logger_log_data->status == STATUS_SAFE_END)
+    {
+        pthread_mutex_unlock(logger_log_mutex);
+        return FAILURE;
+    }
+    logger_curr_record = queue_dequeue_log();
+    logger_local_data = (char*)calloc(MAX_LOG_SIZE,sizeof(char));
+    if(logger_local_data == NULL)
+    {
+        free(logger_curr_record->string_data);
+        logger_curr_record->string_data = NULL;
+        pthread_mutex_unlock(logger_log_mutex);
+        return FAILURE;
+    }
+    strcpy(logger_local_data,logger_curr_record->string_data);
+    free(logger_curr_record->string_data);
+    logger_curr_record->string_data = NULL;
+    pthread_mutex_unlock(logger_log_mutex);
+    sem_post(logger_log_sem_empty);
+
+    return SUCCESS;
+}
+
 void logger_call_exit(void)
 {
     logger_control = END_THREAD;
-    if(data_flag)
+    if(logger_data_flag)
     {
-        log_data->status = STATUS_SAFE_END;
-        sem_post(sem_Full); 
+        logger_log_data->status = STATUS_SAFE_END;
+        sem_post(logger_log_sem_full); 
     }
-    while(end_state == THREAD_WORKING);
+    while(logger_end_state == THREAD_WORKING);
 }
 
 
-
-void logger_log(char* log)
-{
-    if(!data_flag)
-    {
-        return;
-    }
-    char* to_log = (char*)calloc(MAX_LOG_SIZE, sizeof(char));
-    if(to_log == NULL)
-    {
-        return;
-    }
-    strcpy(to_log, log);
-    sem_wait(sem_Empty);
-    pthread_mutex_lock(mutex);
-    queue_enqueue_log(to_log, MAX_LOG_SIZE);
-    log_data->status = STATUS_WORKING;
-    pthread_mutex_unlock(mutex);
-    sem_post(sem_Full);
-}
