@@ -247,7 +247,6 @@ static double* analyzer_interpreter(void)
         return interpreted_data;
 }
 
-
 static void analyzer_free_data(void)
 {
     if(analyzer_data == NULL)
