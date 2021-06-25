@@ -9,6 +9,11 @@
                 "-g",
                 "${file}",
                 "reader.c",
+                "analyzer.c",
+                "printer.c",
+                "watchdog.c",
+                "logger.c",
+                "queue.c",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-lpthread"
