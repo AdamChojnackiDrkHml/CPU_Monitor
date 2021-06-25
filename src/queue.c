@@ -114,31 +114,38 @@ static void queue_destroy_string_data(size_t is_logger)
 
 static void queue_enqueue_string(char* data, unsigned short size, size_t is_logger)
 {
+    
     if(is_logger)
     {
-        unsigned short new_index = queue_log_data->in++ & (LOGGER_QUEUE_SIZE-1);
+        unsigned short new_index = queue_log_data->in;
         queue_log_data->string_data_arr[new_index]->string_data = data;
         queue_log_data->string_data_arr[new_index]->size = size;
+        queue_log_data->in = (queue_log_data->in + 1) % LOGGER_QUEUE_SIZE;
     }
     else
     {
-        unsigned short new_index = queue_RA_data->in++ & (DEFAULT_QUEUE_SIZE-1);
+        unsigned short new_index = queue_RA_data->in;
         queue_RA_data->string_data_arr[new_index]->string_data = data;
         queue_RA_data->string_data_arr[new_index]->size = size;
+        queue_RA_data->in = (queue_RA_data->in + 1) % DEFAULT_QUEUE_SIZE;
     }
 
 }
 
 static queue_string_data_record* queue_dequeue_string(size_t is_logger)
 {
+    queue_string_data_record* to_return;
     if (is_logger)
     {
-        return queue_log_data->string_data_arr[queue_log_data->out++ & (LOGGER_QUEUE_SIZE-1)];
+        to_return = queue_log_data->string_data_arr[queue_log_data->out];
+        queue_log_data->out = (queue_log_data->out + 1) % LOGGER_QUEUE_SIZE;
     }
     else
     {
-        return queue_RA_data->string_data_arr[queue_RA_data->out++ & (DEFAULT_QUEUE_SIZE-1)];
+        to_return = queue_RA_data->string_data_arr[queue_RA_data->out];
+        queue_RA_data->out = (queue_RA_data->out + 1) % DEFAULT_QUEUE_SIZE;
     }
+    return to_return;
 }
 
 static queue_string_data* queue_get_string_data_instance(size_t is_logger)
@@ -285,14 +292,16 @@ static void queue_destroy_AP_data(void)
 
 void queue_enqueue_AP(double* data)
 {
-    unsigned short new_index = queue_AP_data->in++ & (DEFAULT_QUEUE_SIZE-1);
+    unsigned short new_index = queue_AP_data->in;
     queue_AP_data->number_data_arr[new_index]->number_data = data;
+    queue_AP_data->in = (queue_AP_data->in + 1) % DEFAULT_QUEUE_SIZE;
 }
 
 queue_number_data_record* queue_dequeue_AP(void)
 {
-    unsigned short out_index = queue_AP_data->out++ & (DEFAULT_QUEUE_SIZE-1);
-    return queue_AP_data->number_data_arr[out_index];
+    queue_number_data_record* to_return = queue_AP_data->number_data_arr[queue_AP_data->out];
+    queue_AP_data->out = (queue_AP_data->out + 1) % DEFAULT_QUEUE_SIZE;
+    return to_return;
 }
 
 queue_number_data* queue_get_AP_data_instance(void)
